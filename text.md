@@ -100,15 +100,30 @@ rviminfo! ~/_my_viminfo
 #!をつけるとすでに保存されている情報(レジスタ・マーク・oldfiles・その他)が上書きされる
 
 #mviminfo [file]
+古いファイルにマージされた後保存される。
+!をつけると現在のinfoを正とする
+```
+
+```
+browse oldfile
 ```
 
 
 ##参考
+[](https://vim-jp.org/vimdoc-ja/usr_21.html#21.3)
 [](https://vim-jp.org/vimdoc-ja/options.html#'viminfo')
 [](https://vim-jp.org/vimdoc-ja/starting.html#viminfo-file)
 
 
-
+[](https://noahorberg.hatenablog.com/entry/2019/12/15/144256)
+[](https://gorilla.netlify.app/articles/20190620-vim-session-plugin.html)
+[](https://kaworu.jpn.org/kaworu/2007-07-15-7.php)
+[](https://www.wazalab.com/2018/09/15/vim-session-%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6tab%E3%81%94%E3%81%A8session%E3%82%92%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/)
+[](https://keyamb.hatenablog.com/entry/2013/07/12/020730)
+[](https://github.com/skanehira/session.vim/tree/38c35f9796a5ebf28a98c95541287338bde6f618)
+[](https://note.com/noabou/n/naf81c6bf5a5b)
+[](https://qiita.com/gorilla0513/items/838138004f86b66d5668)
+[](https://qiita.com/gorilla0513/items/838138004f86b66d5668)
 
 
 ##vim-session
@@ -116,10 +131,3 @@ rviminfo! ~/_my_viminfo
 
 
 
-
-
-
-
-
-
-[](https://vim-jp.org/vimdoc-ja/usr_21.html#21.3)
