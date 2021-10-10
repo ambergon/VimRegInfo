@@ -12,13 +12,10 @@
 ~h
 
 # Registers:
-"a 	CHAR	0
-	Iyukari:jjj
-|3,2,10,0,1,0,1633823436,"Iyukari:jjoqkbjj"
+"a	CHAR	0
+	YUKARI
+|3,2,10,0,1,0,1633823436,"Iyukari:jjj"
 
-"b	CHAR	0
-	Imaki:jjj
-|3,0,11,0,1,0,1633823711,"Imaki:jjj"
-"g	LINE	0
-	uooooooooo
-|3,0,16,1,1,0,1633824555,"uooooooooo"
+"x	CHAR	0
+	MAKI
+|3,0,33,0,1,0,1633828744,"Imaki:jjj"
