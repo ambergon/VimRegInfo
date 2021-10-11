@@ -11,6 +11,8 @@
 let g:VimGlobalSession=expand("~/.cache/viminfo")
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<args>')
 
+command! -nargs=? RegInfoWindow call VimGlobalSession#window()
+
 
 function! CompInfo(lead, line, pos )
 
@@ -29,6 +31,9 @@ function! CompInfo(lead, line, pos )
 endfunction
 
 
+function! VimGlobalSession#window()
+    25vs ++close 'Test://'
+endfunction
 
 function! VimGlobalSession#info( name )
 
