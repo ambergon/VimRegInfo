@@ -32,7 +32,23 @@ endfunction
 
 
 function! VimGlobalSession#window()
-    25vs ++close 'Test://'
+    25vs Test://
+    "autocmd! WinLeave <buffer> vert resize 25
+    autocmd! BufLeave <buffer> vert resize 25
+    "listに載せない
+    setl nobuflisted
+
+    let s:line_num = 1
+    let s:word = "anpontan"
+    "書き換え
+    call setbufline('Test://', s:line_num, s:word)
+    "行+1に追加
+    call appendbufline('Test://', s:line_num, s:word)
+
+
+
+
+
 endfunction
 
 function! VimGlobalSession#info( name )
