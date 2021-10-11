@@ -8,27 +8,42 @@
 "endif
 "let g:loaded_VimGlobalSession = 1
 
+let g:VimGlobalSession=expand("~/.cache/viminfo")
+command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<args>')
+
 
 function! CompInfo(lead, line, pos )
-    let s:dir = expand("~/.cache/viminfo")
+
+    let s:matches = []
+    let s:dir = g:VimGlobalSession
     let s:sep = fnamemodify(',' , ':p')[-1:]
     let s:Filter = { file -> !isdirectory( s:dir . s:sep . file ) }
     let s:files = readdir( s:dir , s:Filter )
-    echo s:files
-    return s:files
-    "return [ 'aaa' , 'bbb' ]
-    "return "koko,anko"
+
+    for file in s:files
+        if file =~? '^' . strpart(a:lead,0)
+            call add(s:matches,file)
+        endif
+    endfor
+    return s:matches
 endfunction
 
 
-command! -nargs=1 -complete=file,CompInfo ReadInfo call VimGlobalSession#info('<f-args>')
-"command! -nargs=1 -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<f-args>')
+
 function! VimGlobalSession#info( name )
-    echo a:name
 
-    "let s:anko = readdir(s:dir)
-    "echo s:dir
-    "call setline(1,files)
+    let s:file = g:VimGlobalSession . '/default_viminfo.vim'
+    if a:name != ''
+        let s:file = g:VimGlobalSession . '/' . a:name
+    endif
+
+    if filereadable(s:file)
+        execute("rviminfo! " . s:file )
+    endif
 
 endfunction
+
+
+
+
 
