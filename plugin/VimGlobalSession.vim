@@ -9,12 +9,11 @@
 "let g:loaded_VimGlobalSession = 1
 
 let g:VimGlobalSession=expand("~/.cache/viminfo")
+let g:VimGlobalSessionBuffer='RegInfoWindow://'
+"let g:VimGlobalSessionBuffer='VimGlobalSession://Buffer'
+
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<args>')
-
 command! -nargs=? RegInfoWindow call VimGlobalSession#window()
-
-
-
 
 function! CompInfo(lead, line, pos )
 
@@ -32,60 +31,73 @@ function! CompInfo(lead, line, pos )
     return s:matches
 endfunction
 
-
-
-
-nnoremap <expr> q<space> VimGlobalSession#anko()
-"autocmd! TextYankPost * let g:foo = deepcopy(v:event) | VimGlobalSession#do(g:foo)
-
-
 function! VimGlobalSession#anko()
     echo "anko"
-    "autocmd CmdlineChanged * echo "chane"
 endfunction
-
-function! VimGlobalSession#do(list)
-    echo a:list
-    "echo 'anko'
-endfunction
-
-
-
-autocmd! TextYankPost * let g:foo = deepcopy(v:event) | call VimGlobalSession#do(g:foo["regname"])
 
 
 
 
 function! VimGlobalSession#window()
-    25vs Test://VIM
+    
+    "g:の変数が聞かない。。
+    "25vs g:VimGlobalSessionBuffer
+    if !bufexists(g:VimGlobalSessionBuffer)
+        25vs RegInfoWindow://
+    endif
+
     autocmd! BufLeave <buffer> vert resize 25
     autocmd! VimResized <buffer> vert resize 25
     "autocmd! BufWinLeave <buffer> vert resize 25
 
-    "autocmd! TextYankPost * let g:foo =deepcopy(v:event) | echo g:foo
-    "autocmd! TextYankPost * echo v:operator
-
+    "call setreg("key","value)
     "getreg("a")
     "getreginfo("a")
     "getregtype("a")
-    "
-    "call setreg("key","value)
 
     "listに載せない
     setl nobuflisted
+    "折り返さない
+    setl nowrap
+    setl bufhidden=delete
+    setl buftype=nowrite
 
-    let s:line_num = 1
-    let s:word = "anpontan"
     "書き換え
-    call setbufline('Test://', s:line_num, s:word)
-    "行+1に追加
-    call appendbufline('Test://', s:line_num, s:word)
+    call setbufline(g:VimGlobalSessionBuffer,  1, '====================' )
+    call setbufline(g:VimGlobalSessionBuffer,  2, '*:' . VimGlobalSession#line('*'))
+    call setbufline(g:VimGlobalSessionBuffer,  3, '====================' )
 
+    call setbufline(g:VimGlobalSessionBuffer,  4, 'Y:' . VimGlobalSession#line('y'))
+    call setbufline(g:VimGlobalSessionBuffer,  5, 'U:' . VimGlobalSession#line('u'))
+    call setbufline(g:VimGlobalSessionBuffer,  6, 'I:' . VimGlobalSession#line('i'))
+    call setbufline(g:VimGlobalSessionBuffer,  7, 'O:' . VimGlobalSession#line('o'))
+    call setbufline(g:VimGlobalSessionBuffer,  8, 'P:' . VimGlobalSession#line('p'))
 
+    call setbufline(g:VimGlobalSessionBuffer,  9, '====================' )
 
+    call setbufline(g:VimGlobalSessionBuffer, 10, 'H:' . VimGlobalSession#line('h')) 
+    call setbufline(g:VimGlobalSessionBuffer, 11, 'J:' . VimGlobalSession#line('j')) 
+    call setbufline(g:VimGlobalSessionBuffer, 12, 'K:' . VimGlobalSession#line('k'))
+    call setbufline(g:VimGlobalSessionBuffer, 13, 'L:' . VimGlobalSession#line('l'))
 
+    call setbufline(g:VimGlobalSessionBuffer, 14, '====================' )
 
+    call setbufline(g:VimGlobalSessionBuffer, 15, 'N:' . VimGlobalSession#line('n'))
+    call setbufline(g:VimGlobalSessionBuffer, 16, 'M:' . VimGlobalSession#line('m'))
+
+    call setbufline(g:VimGlobalSessionBuffer, 17, '====================' )
+    call setbufline(g:VimGlobalSessionBuffer, 18, '====================' )
+    "call appendbufline('Test://', 0, s:word)
+    "call setbufline('Test://', 0, 'anko')
 endfunction
+
+
+function! VimGlobalSession#line(reg_name)
+    let s:str = substitute(getreg(a:reg_name),"^ *","",'g')
+    return s:str
+endfunction
+
+
 
 function! VimGlobalSession#info( name )
 
@@ -101,6 +113,45 @@ function! VimGlobalSession#info( name )
 endfunction
 
 
-
+""nomal
+""困ったことに、autocmd TextYankPostではsetbuflistが動かせない。。。
+""nnoremap <expr> q<space> VimGlobalSession#anko()
+"autocmd! TextYankPost * let g:VimGlobalSessionEvent = deepcopy(v:event) | call VimGlobalSession#do(g:VimGlobalSessionEvent)
+"
+"function! VimGlobalSession#do(list)
+"    echo a:list
+"    call setbufline(g:VimGlobalSessionBuffer, 17, '====================' )
+"    if a:list["regname"] == ''
+"       call setbufline(g:VimGlobalSessionBuffer,  2, '*:' . VimGlobalSession#line('*'))
+"    elseif a:list["regname"] == 'y'
+"        call setbufline(g:VimGlobalSessionBuffer,  4, 'Y:' . VimGlobalSession#line('y'))
+"    elseif a:list["regname"] == 'u'
+"        call setbufline(g:VimGlobalSessionBuffer,  5, 'U:' . VimGlobalSession#line('u'))
+"    elseif a:list["regname"] == 'i'
+"        call setbufline(g:VimGlobalSessionBuffer,  6, 'I:' . VimGlobalSession#line('i'))
+"    elseif a:list["regname"] == 'o'
+"        call setbufline(g:VimGlobalSessionBuffer,  7, 'O:' . VimGlobalSession#line('o'))
+"    elseif a:list["regname"] == 'p'
+"        call setbufline(g:VimGlobalSessionBuffer,  8, 'P:' . VimGlobalSession#line('p'))
+"
+"
+"    elseif a:list["regname"] == 'h'
+"        call setbufline(g:VimGlobalSessionBuffer, 10, 'H:' . VimGlobalSession#line('h')) 
+"    elseif a:list["regname"] == 'j'
+"        call setbufline(g:VimGlobalSessionBuffer, 11, 'J:' . VimGlobalSession#line('j')) 
+"    elseif a:list["regname"] == 'k'
+"        call setbufline(g:VimGlobalSessionBuffer, 12, 'K:' . VimGlobalSession#line('k'))
+"    elseif a:list["regname"] == 'l'
+"        call setbufline(g:VimGlobalSessionBuffer, 13, 'L:' . VimGlobalSession#line('l'))
+"
+"
+"    elseif a:list["regname"] == 'n'
+"        call setbufline(g:VimGlobalSessionBuffer, 15, 'N:' . VimGlobalSession#line('n'))
+"    elseif a:list["regname"] == 'm'
+"        call setbufline(g:VimGlobalSessionBuffer, 16, 'M:' . VimGlobalSession#line('m'))
+"    else
+"        echo a:list
+"    endif
+"endfunction
 
 
