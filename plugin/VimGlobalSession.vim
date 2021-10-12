@@ -14,6 +14,8 @@ command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#i
 command! -nargs=? RegInfoWindow call VimGlobalSession#window()
 
 
+
+
 function! CompInfo(lead, line, pos )
 
     let s:matches = []
@@ -31,10 +33,44 @@ function! CompInfo(lead, line, pos )
 endfunction
 
 
+
+
+nnoremap <expr> q<space> VimGlobalSession#anko()
+"autocmd! TextYankPost * let g:foo = deepcopy(v:event) | VimGlobalSession#do(g:foo)
+
+
+function! VimGlobalSession#anko()
+    echo "anko"
+    "autocmd CmdlineChanged * echo "chane"
+endfunction
+
+function! VimGlobalSession#do(list)
+    echo a:list
+    "echo 'anko'
+endfunction
+
+
+
+autocmd! TextYankPost * let g:foo = deepcopy(v:event) | call VimGlobalSession#do(g:foo["regname"])
+
+
+
+
 function! VimGlobalSession#window()
-    25vs Test://
-    "autocmd! WinLeave <buffer> vert resize 25
+    25vs Test://VIM
     autocmd! BufLeave <buffer> vert resize 25
+    autocmd! VimResized <buffer> vert resize 25
+    "autocmd! BufWinLeave <buffer> vert resize 25
+
+    "autocmd! TextYankPost * let g:foo =deepcopy(v:event) | echo g:foo
+    "autocmd! TextYankPost * echo v:operator
+
+    "getreg("a")
+    "getreginfo("a")
+    "getregtype("a")
+    "
+    "call setreg("key","value)
+
     "listに載せない
     setl nobuflisted
 
