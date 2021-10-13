@@ -19,8 +19,9 @@ let g:VimGlobalSessionAutoStart = 1
 autocmd! TextYankPost * call VimGlobalSession#setAutocmd()
 
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<args>')
-command! -nargs=? RegInfoWindow call VimGlobalSession#setWindow()
-command! -nargs=? RegInfoWindowClean call VimGlobalSession#regClean()
+command! -nargs=0 RegInfoWindow call VimGlobalSession#setWindow()
+command! -nargs=0 RegInfoWindowClean call VimGlobalSession#regClean()
+command! -nargs=1 RegExchange call VimGlobalSession#regExchange(<f-args>)
 
 function! CompInfo(lead, line, pos )
     let s:matches = []
@@ -44,6 +45,21 @@ function! VimGlobalSession#info( name )
     endif
     if filereadable(s:file)
         execute("rviminfo! " . s:file )
+    endif
+    call VimGlobalSession#setTemplate()
+endfunction
+
+function! VimGlobalSession#regExchange(reg_name)
+    let s:count = strlen(a:reg_name)
+    if s:count == 1
+        "引数を一文字として扱いレジスタ名に。
+        "無名レジスタの中身を指定レジスタに。
+        call setreg( a:reg_name, getreg("*"))
+        echo '* -> ' . a:reg_name
+    else
+        "２文字目を一文字目のレジスタに。
+        call setreg( a:reg_name[1], getreg(a:reg_name[0]))
+        echo a:reg_name[0] . ' -> ' . a:reg_name[1]
     endif
     call VimGlobalSession#setTemplate()
 endfunction
@@ -159,20 +175,16 @@ function! VimGlobalSession#setTemplate()
     call setbufline(g:VimGlobalSessionBuffer,  33, 'V:' . VimGlobalSession#setReplace('v'))
     call setbufline(g:VimGlobalSessionBuffer,  34, 'B:' . VimGlobalSession#setReplace('b'))
 endfunction
+
 if g:VimGlobalSessionAutoStart == 1
     call VimGlobalSession#setWindow()
 endif
 
-""困ったことに、autocmd TextYankPostではsetbuflistが動かせない。。。
 "autocmd! TextYankPost * let g:VimGlobalSessionEvent = deepcopy(v:event) | call VimGlobalSession#do(g:VimGlobalSessionEvent)
 "function! VimGlobalSession#do(list)
 "    if a:list["regname"] == ''
 "        echo a:list
 "endfunction
 
-    "25vs RegInfoWindow://
-    "call appendbufline('Test://', 0, s:word)
-    "call setbufline('Test://', 0, 'anko')
-    "call setreg("key","value)
-    "getregtype("a")
-
+"call appendbufline('Test://', 0, s:word)
+"getregtype("a")
