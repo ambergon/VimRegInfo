@@ -13,6 +13,9 @@ let g:VimGlobalSessionBuffer='RegInfoWindow://'
 "viminfoを管理するディレクトリ
 let g:VimGlobalSession=expand("~/.cache/viminfo")
 
+let g:VimGlobalSessionAutoStart = 1
+
+
 autocmd! TextYankPost * call VimGlobalSession#setAutocmd()
 
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimGlobalSession#info('<args>')
@@ -82,6 +85,8 @@ endfunction
 
 function! VimGlobalSession#setWindow()
     if !bufexists(g:VimGlobalSessionBuffer)
+        let s:current_winID = win_getid()
+
         "25vs g:VimGlobalSessionBuffer
         25vs RegInfoWindow://
         "autocmd! BufWinLeave <buffer> vert resize 25
@@ -98,6 +103,8 @@ function! VimGlobalSession#setWindow()
         setl buftype=nowrite
         "    if !bufloaded(g:VimGlobalSessionBuffer)
         "    endif
+        
+        call win_gotoid(s:current_winID)
     endif
     call VimGlobalSession#setTemplate()
 endfunction
@@ -152,6 +159,9 @@ function! VimGlobalSession#setTemplate()
     call setbufline(g:VimGlobalSessionBuffer,  33, 'V:' . VimGlobalSession#setReplace('v'))
     call setbufline(g:VimGlobalSessionBuffer,  34, 'B:' . VimGlobalSession#setReplace('b'))
 endfunction
+if g:VimGlobalSessionAutoStart == 1
+    call VimGlobalSession#setWindow()
+endif
 
 ""困ったことに、autocmd TextYankPostではsetbuflistが動かせない。。。
 "autocmd! TextYankPost * let g:VimGlobalSessionEvent = deepcopy(v:event) | call VimGlobalSession#do(g:VimGlobalSessionEvent)
