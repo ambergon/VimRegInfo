@@ -8,13 +8,15 @@
 "endif
 "let g:loaded_VimGlobalSession = 1
 
-"vs bufname...
-let g:VimGlobalSessionBuffer='RegInfoWindow://'
+"自動実行時1
+let g:VimGlobalSessionAutoStart = 1
 "viminfoを管理するディレクトリ
 let g:VimGlobalSession=expand("~/.cache/viminfo")
 
-let g:VimGlobalSessionAutoStart = 1
+"vs bufname...
+let g:VimGlobalSessionBuffer='RegInfoWindow://'
 
+"recordingによるレジスタの変更ができない。
 
 autocmd! TextYankPost * call VimGlobalSession#setAutocmd()
 
@@ -117,9 +119,6 @@ function! VimGlobalSession#setWindow()
         setl nonumber
         setl norelativenumber
         setl buftype=nowrite
-        "    if !bufloaded(g:VimGlobalSessionBuffer)
-        "    endif
-        
         call win_gotoid(s:current_winID)
     endif
     call VimGlobalSession#setTemplate()
@@ -164,16 +163,18 @@ function! VimGlobalSession#setTemplate()
     call setbufline(g:VimGlobalSessionBuffer,  22, 'E:' . VimGlobalSession#setReplace('e'))
     call setbufline(g:VimGlobalSessionBuffer,  23, 'R:' . VimGlobalSession#setReplace('r'))
     call setbufline(g:VimGlobalSessionBuffer,  24, 'T:' . VimGlobalSession#setReplace('t'))
-    call setbufline(g:VimGlobalSessionBuffer,  25, 'A:' . VimGlobalSession#setReplace('a'))
-    call setbufline(g:VimGlobalSessionBuffer,  26, 'S:' . VimGlobalSession#setReplace('s'))
-    call setbufline(g:VimGlobalSessionBuffer,  27, 'D:' . VimGlobalSession#setReplace('d'))
-    call setbufline(g:VimGlobalSessionBuffer,  28, 'F:' . VimGlobalSession#setReplace('f'))
-    call setbufline(g:VimGlobalSessionBuffer,  29, 'G:' . VimGlobalSession#setReplace('g'))
-    call setbufline(g:VimGlobalSessionBuffer,  30, 'Z:' . VimGlobalSession#setReplace('z'))
-    call setbufline(g:VimGlobalSessionBuffer,  31, 'X:' . VimGlobalSession#setReplace('x'))
-    call setbufline(g:VimGlobalSessionBuffer,  32, 'C:' . VimGlobalSession#setReplace('c'))
-    call setbufline(g:VimGlobalSessionBuffer,  33, 'V:' . VimGlobalSession#setReplace('v'))
-    call setbufline(g:VimGlobalSessionBuffer,  34, 'B:' . VimGlobalSession#setReplace('b'))
+    call setbufline(g:VimGlobalSessionBuffer,  25, ' ' )
+    call setbufline(g:VimGlobalSessionBuffer,  26, 'A:' . VimGlobalSession#setReplace('a'))
+    call setbufline(g:VimGlobalSessionBuffer,  27, 'S:' . VimGlobalSession#setReplace('s'))
+    call setbufline(g:VimGlobalSessionBuffer,  28, 'D:' . VimGlobalSession#setReplace('d'))
+    call setbufline(g:VimGlobalSessionBuffer,  29, 'F:' . VimGlobalSession#setReplace('f'))
+    call setbufline(g:VimGlobalSessionBuffer,  30, 'G:' . VimGlobalSession#setReplace('g'))
+    call setbufline(g:VimGlobalSessionBuffer,  31, ' ' )
+    call setbufline(g:VimGlobalSessionBuffer,  32, 'Z:' . VimGlobalSession#setReplace('z'))
+    call setbufline(g:VimGlobalSessionBuffer,  33, 'X:' . VimGlobalSession#setReplace('x'))
+    call setbufline(g:VimGlobalSessionBuffer,  34, 'C:' . VimGlobalSession#setReplace('c'))
+    call setbufline(g:VimGlobalSessionBuffer,  35, 'V:' . VimGlobalSession#setReplace('v'))
+    call setbufline(g:VimGlobalSessionBuffer,  36, 'B:' . VimGlobalSession#setReplace('b'))
 endfunction
 
 if g:VimGlobalSessionAutoStart == 1
