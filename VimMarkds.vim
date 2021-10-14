@@ -40,8 +40,17 @@
 "	m	12	0
 "	n	11	0
 
-autocmd bufEnter * call VimMarkds#setSign()
+command! -nargs=0 MarkClean call VimMarkds#clean()
+
+autocmd! VimEnter,bufEnter * call VimMarkds#setSign()
+autocmd! VimEnter * call VimMarkds#setVisual()
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
+let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+function! VimMarkds#clean()
+    "echo 'anko'
+    delmarks!
+endfunction
 
 "set sign
 function! VimMarkds#setSign()
@@ -60,20 +69,36 @@ function! VimMarkds#setSign()
     call sign_unplace( 'local_group')
     
     ""local_mark
-    for s:word in g:local_list
+    for s:local_word in g:local_list
         "getpos = 0だとエラー
-        if getpos("'" . s:word)[1] != 0
-            call sign_place( 0, 'local_group', 'local_' . s:word, 1,{'lnum' : getpos("'" . s:word)[1] })
+        if getpos("'" . s:local_word)[1] != 0
+            call sign_place( 0, 'local_group', 'local_' . s:local_word, 1,{'lnum' : getpos("'" . s:local_word)[1] })
+        endif
+    endfor
+    
+    ""global_mark
+    for s:global_word in g:global_list
+        "getpos = 0だとエラー
+        if getpos("'" . s:global_word)[1] != 0
+            call sign_place( 0, 'global_group', 'global_' . s:global_word, 1,{'lnum' : getpos("'" . s:global_word)[1] })
         endif
     endfor
 endfunction
 
 ""local_markの色を定義
+""global_markの色を定義
 function! VimMarkds#setVisual()
     hi LocalMark ctermfg=254 ctermbg=242
+    hi GlobalMark ctermfg=113 ctermbg=175
+
     "local_mark
-    for s:word in g:local_list
-        call sign_define("local_" . s:word,{"text" : s:word . ">", "texthl" : "LocalMark"})
+    for s:local_word in g:local_list
+        call sign_define("local_" . s:local_word,{"text" : s:local_word . ">", "texthl" : "LocalMark"})
+    endfor
+
+    "global_mark
+    for s:global_word in g:global_list
+        call sign_define("global_" . s:global_word,{"text" : s:global_word . ">", "texthl" : "GlobalMark"})
     endfor
 endfunction
 
