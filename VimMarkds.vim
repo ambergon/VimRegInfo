@@ -49,7 +49,7 @@ let s:left_buffer_name ='TEST://MARKERS'
 
 command! -nargs=0 MarkClean call VimMarkds#localMarkClean()
 
-command! -nargs=0 MarkSing call VimMarkds#setSing()
+command! -nargs=0 MarkSign call VimMarkds#setSign()
 command! -nargs=0 MarkVisual call VimMarkds#setVisual()
 command! -nargs=0 MarkWindow call VimMarkds#markersWindow()
 
@@ -76,6 +76,8 @@ function! VimMarkds#markersWindow()
         setl nonumber
         setl norelativenumber
         setl buftype=nowrite
+        "bufexist
+        setl bufhidden=wipe
         call win_gotoid(l:current_winID)
     endif
     call VimMarkds#setMarkerLine()
@@ -95,11 +97,8 @@ function! VimMarkds#setMarkerLine()
     let l:x=0
     for l:local_mark in getmarklist(bufnr())
         let l:x = x+1
-        call setbufline(s:left_buffer_name,  1, l:local_mark["mark"] )
+        call setbufline(s:left_buffer_name,  l:x, l:local_mark["mark"] )
     endfor
-
-
-    "call setbufline(s:left_buffer_name,  1, '====================' )
 endfunction
 
 function! VimMarkds#localMarkClean()
@@ -113,12 +112,18 @@ function! VimMarkds#setSign()
     call sign_unplace( 'global_group')
     
     ""local_mark
-    for s:local_word in g:local_list
-        "getpos = 0だとエラー
-        if getpos("'" . s:local_word)[1] != 0
-            call sign_place( 0, 'local_group', 'local_' . s:local_word, bufnr(),{'lnum' : getpos("'" . s:local_word)[1], 'priority' : 10 })
-        endif
+    "設定済みのmarkのみ処理するから早いと思うけれど[などの記号マークの処理がめんどいなJj:w
+    for l:local_mark in getmarklist(bufnr())
+        call sign_place( 0, 'local_group', 'local_' . substitute(l:local_mark["mark"],"'","",'g'), bufnr(),{'lnum' : l:local_mark["pos"][1], 'priority' : 10 })
     endfor
+
+
+    "for s:local_word in g:local_list
+    "    "getpos = 0だとエラー
+    "    if getpos("'" . s:local_word)[1] != 0
+    "        call sign_place( 0, 'local_group', 'local_' . s:local_word, bufnr(),{'lnum' : getpos("'" . s:local_word)[1], 'priority' : 10 })
+    "    endif
+    "endfor
     
     ""global_mark
     for s:global_word in g:global_list
