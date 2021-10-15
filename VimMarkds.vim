@@ -5,9 +5,10 @@
 ""グローバルマークはviminfoの下記
 "# File marks:
 
-""この行はなくても問題ない。
 "marksでは開いてなければファイル名が。
 "開いていれば行の内容がmarksコマンドで取得することができる。
+"
+"この行はなくても問題ない。
 "'B  21  0  ~\my_workspace\vim\VimGlobalSession\plugin\VimGlobalSession.vim
 "|4,65,21,0,1634133756,"~\\my_workspace\\vim\\VimGlobalSession\\plugin\\VimGlobalSession.vim"
 
@@ -39,63 +40,59 @@
 "	l	10	0
 "	m	12	0
 "	n	11	0
+"
+"
 
-command! -nargs=0 MarkClean call VimMarkds#clean()
-
-autocmd! VimEnter,bufEnter * call VimMarkds#setSign()
-autocmd! VimEnter * call VimMarkds#setVisual()
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-function! VimMarkds#clean()
-    "echo 'anko'
+command! -nargs=0 MarkClean call VimMarkds#localMarkClean()
+
+autocmd! bufEnter * call VimMarkds#setSign()
+"autocmd! VimEnter,bufEnter,InsertLeave * call VimMarkds#setSign()
+autocmd! VimEnter * call VimMarkds#setVisual()
+
+
+function! VimMarkds#localMarkClean()
     delmarks!
 endfunction
 
 "set sign
 function! VimMarkds#setSign()
-    "let s:mark_a = getpos("'a")
-    "echo s:mark_a
-    ""buf-num current=0
-    "echo s:mark_a[0]
-    ""行番号
-    "echo s:mark_a[1]
-    ""列
-    "echo s:mark_a[2]
-    ""offset
-    "echo s:mark_a[3]
-    
     ""すべて解除
     call sign_unplace( 'local_group')
+    call sign_unplace( 'global_group')
     
     ""local_mark
     for s:local_word in g:local_list
         "getpos = 0だとエラー
         if getpos("'" . s:local_word)[1] != 0
-            call sign_place( 0, 'local_group', 'local_' . s:local_word, 1,{'lnum' : getpos("'" . s:local_word)[1] })
+            call sign_place( 0, 'local_group', 'local_' . s:local_word, bufnr(),{'lnum' : getpos("'" . s:local_word)[1], 'priority' : 10 })
         endif
     endfor
     
     ""global_mark
     for s:global_word in g:global_list
-        "getpos = 0だとエラー
+        "getpos = 0行 = 未設定 だとエラー
         if getpos("'" . s:global_word)[1] != 0
-            call sign_place( 0, 'global_group', 'global_' . s:global_word, 1,{'lnum' : getpos("'" . s:global_word)[1] })
+            "getBufnum = current
+            if getpos("'" . s:global_word)[0] == bufnr()
+                call sign_place( 0, 'global_group', 'global_' . s:global_word, bufnr(),{'lnum' : getpos("'" . s:global_word)[1], 'priority' : 20 })
+            endif
         endif
     endfor
 endfunction
 
-""local_markの色を定義
-""global_markの色を定義
 function! VimMarkds#setVisual()
-    hi LocalMark ctermfg=254 ctermbg=242
-    hi GlobalMark ctermfg=113 ctermbg=175
+    ""local_markの色を定義
+    hi LocalMark ctermfg=254 ctermbg=242 guifg=#e4e4e4 guibg=#666666
+    ""global_markの色を定義
+    hi GlobalMark ctermfg=113 ctermbg=175 guifg=#87df5f guibg=#df87af
 
     "local_mark
     for s:local_word in g:local_list
         call sign_define("local_" . s:local_word,{"text" : s:local_word . ">", "texthl" : "LocalMark"})
     endfor
-
     "global_mark
     for s:global_word in g:global_list
         call sign_define("global_" . s:global_word,{"text" : s:global_word . ">", "texthl" : "GlobalMark"})
@@ -104,15 +101,19 @@ endfunction
 
 
 "new window marklist
-function! VimMarkds#a()
-    echo 'ank'
-endfunction
 
 
-
-
-
-
+"let s:mark_a = getpos("'a")
+"echo s:mark_a
+""buf-num current=0
+"echo s:mark_a[0]
+""行番号
+"echo s:mark_a[1]
+""列
+"echo s:mark_a[2]
+""offset
+"echo s:mark_a[3]
+    
 
 
 
