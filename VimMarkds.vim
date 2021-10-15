@@ -44,7 +44,8 @@
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-let g:bufname_l ='TEST://'
+"25vs RegInfoWindow://
+let s:left_buffer_name ='TEST://MARKERS'
 
 command! -nargs=0 MarkClean call VimMarkds#localMarkClean()
 
@@ -52,14 +53,53 @@ command! -nargs=0 MarkSing call VimMarkds#setSing()
 command! -nargs=0 MarkVisual call VimMarkds#setVisual()
 command! -nargs=0 MarkWindow call VimMarkds#markersWindow()
 
+autocmd! VimEnter * call VimMarkds#setVisual()
+autocmd! bufEnter,InsertLeave * call VimMarkds#setVisual()
 "autocmd! bufEnter * call VimMarkds#setSign()
 autocmd! VimEnter,bufEnter,InsertLeave * call VimMarkds#setSign()
-autocmd! VimEnter * call VimMarkds#setVisual()
-autocmd! bufEnter * call VimMarkds#setVisual()
+autocmd! bufEnter * call VimMarkds#setSign()
 
 function! VimMarkds#markersWindow()
-    "aboveleft 25vs call g:bufname_l 
-    execute("aboveleft 25vs " . g:bufname_l)
+    if !bufexists(s:left_buffer_name)
+        let l:current_winID = win_getid()
+        execute("aboveleft 25vs " . s:left_buffer_name)
+
+        "autocmd! BufWinLeave <buffer> vert resize 25
+        autocmd! BufLeave <buffer> vert resize 25
+        autocmd! VimResized <buffer> vert resize 25
+        "qで終了
+        nnoremap <buffer> q :q<CR>
+        "listに載せない
+        setl nobuflisted
+        "折り返さない
+        setl nowrap
+        setl nonumber
+        setl norelativenumber
+        setl buftype=nowrite
+        call win_gotoid(l:current_winID)
+    endif
+    call VimMarkds#setMarkerLine()
+endfunction
+
+function! VimMarkds#setMarkerLine()
+    "引数がなければグローバル
+    "getmarklist(bufnr())
+    "local
+    ""dict
+    "mark,post
+    "
+    "global
+    ""dict
+    "file,mark,pos
+    "
+    let l:x=0
+    for l:local_mark in getmarklist(bufnr())
+        let l:x = x+1
+        call setbufline(s:left_buffer_name,  1, l:local_mark["mark"] )
+    endfor
+
+
+    "call setbufline(s:left_buffer_name,  1, '====================' )
 endfunction
 
 function! VimMarkds#localMarkClean()
