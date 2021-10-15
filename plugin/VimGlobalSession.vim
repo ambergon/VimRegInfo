@@ -13,7 +13,6 @@ let g:VimGlobalSessionAutoStart = 1
 "viminfoを管理するディレクトリ
 let g:VimGlobalSession=expand("~/.cache/viminfo")
 
-"vs bufname...
 let g:VimGlobalSessionBuffer='RegInfoWindow://'
 
 "recordingによるレジスタの変更ができない。
@@ -105,8 +104,8 @@ function! VimGlobalSession#setWindow()
     if !bufexists(g:VimGlobalSessionBuffer)
         let s:current_winID = win_getid()
 
-        "25vs g:VimGlobalSessionBuffer
-        25vs RegInfoWindow://
+        "25vs RegInfoWindow://
+        execute("25vs " . g:VimGlobalSessionBuffer)
         "autocmd! BufWinLeave <buffer> vert resize 25
         autocmd! BufLeave <buffer> vert resize 25
         autocmd! VimResized <buffer> vert resize 25

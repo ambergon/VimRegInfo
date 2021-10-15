@@ -40,18 +40,27 @@
 "	l	10	0
 "	m	12	0
 "	n	11	0
-"
-"
+
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+let g:bufname_l ='TEST://'
 
 command! -nargs=0 MarkClean call VimMarkds#localMarkClean()
 
-autocmd! bufEnter * call VimMarkds#setSign()
-"autocmd! VimEnter,bufEnter,InsertLeave * call VimMarkds#setSign()
-autocmd! VimEnter * call VimMarkds#setVisual()
+command! -nargs=0 MarkSing call VimMarkds#setSing()
+command! -nargs=0 MarkVisual call VimMarkds#setVisual()
+command! -nargs=0 MarkWindow call VimMarkds#markersWindow()
 
+"autocmd! bufEnter * call VimMarkds#setSign()
+autocmd! VimEnter,bufEnter,InsertLeave * call VimMarkds#setSign()
+autocmd! VimEnter * call VimMarkds#setVisual()
+autocmd! bufEnter * call VimMarkds#setVisual()
+
+function! VimMarkds#markersWindow()
+    "aboveleft 25vs call g:bufname_l 
+    execute("aboveleft 25vs " . g:bufname_l)
+endfunction
 
 function! VimMarkds#localMarkClean()
     delmarks!
