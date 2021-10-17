@@ -1,4 +1,7 @@
-
+"""setting
+"
+"g:marker_window = ''
+"
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -9,21 +12,23 @@ if !exists("g:marker_window")
 endif
 
 
-
 command! -nargs=0 MarkStart call VimMarkds#startup()
 autocmd! vimEnter * call VimMarkds#startup()
 
-autocmd! bufEnter * call VimMarkds#markersWindow()
-autocmd! InsertLeave * call VimMarkds#markersWindow()
-autocmd! bufEnter * call VimMarkds#setSign()
-autocmd! InsertLeave * call VimMarkds#setSign()
+autocmd! bufWinEnter * call VimMarkds#openMarkerWindow()
+autocmd! WinEnter * call VimMarkds#openMarkerWindow()
+"autocmd! bufEnter * call VimMarkds#openMarkerWindow()
+"autocmd! InsertLeave * call VimMarkds#openMarkerWindow()
+
+autocmd! bufEnter * call VimMarkds#signSet()
+autocmd! InsertLeave * call VimMarkds#signSet()
 
 function! VimMarkds#startup()
-    call VimMarkds#setVisual()
-    call VimMarkds#markersWindow()
+    call VimMarkds#setHighLight()
+    call VimMarkds#openMarkerWindow()
 endfunction
 
-function! VimMarkds#markersWindow()
+function! VimMarkds#openMarkerWindow()
     if !bufexists(s:left_buffer_name)
         let l:current_winID = win_getid()
         execute("aboveleft 30vs " . s:left_buffer_name)
@@ -44,64 +49,51 @@ function! VimMarkds#markersWindow()
         setl bufhidden=wipe
         call win_gotoid(l:current_winID)
     endif
-    call VimMarkds#setMarkerLine()
+    call VimMarkds#windowAppendLines()
 endfunction
 
-function! VimMarkds#setReplace( text )
+function! VimMarkds#Replace( text )
     let l:res = a:text
     let l:res = substitute( l:res ,"^ *","",'')
     let l:res = substitute( l:res ,"^function","F",'')
     return l:res
 endfunction
 
-function! VimMarkds#boolLocalLine(word)
-    let l:line = ""
-    "getpos = 0だとエラー
-    if getpos("'" . a:word)[1] != 0
-        let l:line = VimMarkds#setReplace(getline(getpos("'" . a:word)[1]))
-    endif
+function! VimMarkds#windowLocalMark(word)
+    let l:line = VimMarkds#Replace(getline(getpos("'" . a:word)[1]))
     return a:word . ":" . l:line
 endfunction
 
-function! VimMarkds#boolGlobalLine(word)
-    let l:line = ""
-    "getpos = 0だとエラー
-    if getpos("'" . a:word)[1] != 0
-        let l:line = bufname(getpos("'" . a:word)[0])
-    endif
+function! VimMarkds#windowGlobalMark(word)
+    let l:line = bufname(getpos("'" . a:word)[0])
     return a:word . ":" . l:line
 endfunction
 
-function! VimMarkds#setMarkerLine()
-    "引数がなければグローバル
-    "getmarklist(bufnr())
-    "mark,post
-    
-    "global
-    "file,mark,pos
+function! VimMarkds#windowAppendLines()
+    "clean
+    call deletebufline(s:left_buffer_name,1,"$")
     
     ""local
     let l:x=0
     for l:local_word in g:marker_window
         if getpos("'" . l:local_word)[1] != 0
-            let l:x = x+1
-            call setbufline(s:left_buffer_name,  l:x, VimMarkds#boolLocalLine(l:local_word))
+            let l:x = l:x+1
+            call setbufline(s:left_buffer_name,  l:x, VimMarkds#windowLocalMark(l:local_word))
         endif
     endfor
-
-    let l:x = x+1
-    call setbufline(s:left_buffer_name,  l:x, "====================")
-
+    let l:x = l:x+1
+    call setbufline(s:left_buffer_name,  l:x, "=============================")
+    ""global
     for l:global_word in g:global_list
-        if getpos("'" . l:local_word)[1] != 0
-            let l:x = x+1
-            call setbufline(s:left_buffer_name,  l:x, VimMarkds#boolGlobalLine(l:global_word))
+        if getpos("'" . l:global_word)[1] != 0
+            let l:x = l:x+1
+            call setbufline(s:left_buffer_name,  l:x, VimMarkds#windowGlobalMark(l:global_word))
         endif
     endfor
 endfunction
 
 "set sign
-function! VimMarkds#setSign()
+function! VimMarkds#signSet()
     ""すべて解除
     call sign_unplace( 'local_group')
     call sign_unplace( 'global_group')
@@ -125,7 +117,7 @@ function! VimMarkds#setSign()
     endfor
 endfunction
 
-function! VimMarkds#setVisual()
+function! VimMarkds#setHighLight()
     ""local_markの色を定義
     hi LocalMark ctermfg=254 ctermbg=242 guifg=#e4e4e4 guibg=#666666
     ""global_markの色を定義
@@ -142,21 +134,6 @@ function! VimMarkds#setVisual()
 endfunction
 
 
-"let s:mark_a = getpos("'a")
-"echo s:mark_a
-""buf-num current=0
-"echo s:mark_a[0]
-""行番号
-"echo s:mark_a[1]
-""列
-"echo s:mark_a[2]
-""offset
-"echo s:mark_a[3]
-    
-
-""delmarks!では
-"A-Zが消えない。
-
 ""グローバルマークはviminfoの下記
 "# File marks:
 
@@ -170,8 +147,6 @@ endfunction
 "|4,57,14,0,1634169111,"~\\my_workspace\\vim\\VimGlobalSession\\plugin\\VimGlobalSession.vim"
 
 
-""localなマークはこのように保存されている
-"+はundoなどで使うのではないだろうか
 "# History of marks within files (newest to oldest):
 
 "> ~\my_workspace\vim\VimGlobalSession\VimMarkds.vim
