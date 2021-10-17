@@ -54,6 +54,9 @@ command! -nargs=0 MarkVisual call VimMarkds#setVisual()
 command! -nargs=0 MarkWindow call VimMarkds#markersWindow()
 
 command! -nargs=0 MarkStart call VimMarkds#startup()
+autocmd! bufEnter * call VimMarkds#setMarkerLine()
+autocmd! bufEnter * call VimMarkds#setSign()
+autocmd! InsertLeave * call VimMarkds#setSign()
 
 "autocmd! VimEnter * call VimMarkds#setVisual()
 "autocmd! bufEnter,InsertLeave * call VimMarkds#setVisual()
@@ -75,8 +78,8 @@ function! VimMarkds#markersWindow()
         "autocmd! BufWinLeave <buffer> vert resize 25
         autocmd! BufLeave <buffer> vert resize 25
         autocmd! VimResized <buffer> vert resize 25
-        autocmd! bufEnter,InsertLeave * call VimMarkds#setMarkerLine()
-        autocmd! bufEnter,InsertLeave * call VimMarkds#setSign()
+        "autocmd! bufEnter * call VimMarkds#setMarkerLine()
+        "autocmd! InsertLeave * call VimMarkds#setMarkerLine()
 
         "qで終了
         nnoremap <buffer> q :q<CR>
@@ -91,13 +94,21 @@ function! VimMarkds#markersWindow()
         setl bufhidden=wipe
         call win_gotoid(l:current_winID)
     endif
-    "call VimMarkds#setMarkerLine()
+    call VimMarkds#setMarkerLine()
 endfunction
+
+function! VimMarkds#setReplace(reg_name, text)
+    let l:reg_name = substitute(a:reg_name,"'","","")
+    let l:text_line = substitute( a:text ,"^ *","",'')
+    "let l:str = substitute(getreg(a:reg_name),"^ *","",'g')
+    let l:line = l:reg_name . ":" . l:text_line
+    return l:line
+endfunction
+
 
 function! VimMarkds#setMarkerLine()
     "引数がなければグローバル
     "getmarklist(bufnr())
-    "local
     ""dict
     "mark,post
     "
@@ -105,11 +116,11 @@ function! VimMarkds#setMarkerLine()
     ""dict
     "file,mark,pos
     
+    ""local
     let l:x=0
     for l:local_mark in getmarklist(bufnr())
         let l:x = x+1
-        "
-        call setbufline(s:left_buffer_name,  l:x, l:local_mark["mark"] )
+        call setbufline(s:left_buffer_name,  l:x, VimMarkds#setReplace( l:local_mark["mark"], getline(l:local_mark["pos"][1])))
     endfor
 endfunction
 
