@@ -1,10 +1,10 @@
 """setting
 "let g:marker_window = 'abcde'
 
-"if exists('g:loaded_VimMarkerInfo')
-"  finish
-"endif
-"let g:loaded_VimMarkerInfo = 1
+if exists('g:loaded_VimMarkerInfo')
+  finish
+endif
+let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'

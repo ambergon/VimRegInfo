@@ -23,7 +23,7 @@ let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 augroup VimSelectInfo
     "recordingによるレジスタの変更ができない。
-    autocmd! TextYankPost * call VimSelectInfo#nextYankPost()
+    autocmd TextYankPost * call VimSelectInfo#nextYankPost()
 augroup end
 
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimSelectInfo#selectInfo('<args>')
@@ -104,7 +104,7 @@ function! VimSelectInfo#regClean()
 endfunction
 
 function! VimSelectInfo#nextYankPost()
-    autocmd! SafeState * ++once call VimSelectInfo#openWindow()
+    autocmd SafeState * ++once call VimSelectInfo#openWindow()
 endfunction
 
 function! VimSelectInfo#openWindow()
@@ -113,10 +113,10 @@ function! VimSelectInfo#openWindow()
 
         execute("25vs " . s:VimSelectInfoBuffer)
         augroup right_window
-            autocmd! BufLeave <buffer> vert resize 25
-            autocmd! VimResized <buffer> vert resize 25
-            autocmd! BufWinEnter <buffer> vert resize 25
-            autocmd! BufWinLeave <buffer> vert resize 25
+            autocmd BufLeave <buffer> vert resize 25
+            autocmd VimResized <buffer> vert resize 25
+            autocmd BufWinEnter <buffer> vert resize 25
+            autocmd BufWinLeave <buffer> vert resize 25
         augroup end
 
         "qで終了
