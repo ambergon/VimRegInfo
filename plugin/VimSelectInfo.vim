@@ -20,10 +20,6 @@ endif
 
 let s:VimSelectInfoBuffer='RegInfoWindow://'
 
-augroup VimSelectInfo
-    "recordingによるレジスタの変更ができない。
-    autocmd TextYankPost * call VimSelectInfo#nextYankPost()
-augroup end
 
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimSelectInfo#selectInfo('<args>')
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
@@ -102,10 +98,6 @@ function! VimSelectInfo#regClean()
     call VimSelectInfo#setTemplate()
 endfunction
 
-function! VimSelectInfo#nextYankPost()
-    autocmd SafeState * ++once call VimSelectInfo#openWindow()
-endfunction
-
 function! VimSelectInfo#openWindow()
     if !bufexists(s:VimSelectInfoBuffer)
         let l:current_winID = win_getid()
@@ -178,8 +170,20 @@ function! VimSelectInfo#setTemplate()
     call setbufline(s:VimSelectInfoBuffer,  36, 'B:' . VimSelectInfo#setReplace('b'))
 endfunction
 
-if g:VimSelectInfoAutoStart == 1
-    call VimSelectInfo#openWindow()
+function! VimSelectInfo#nextYankPost()
+    augroup VimSelectInfo
+        autocmd SafeState * ++once call VimSelectInfo#openWindow()
+    augroup end
+endfunction
+
+if exists("g:VimSelectInfoAutoStart")
+    if g:VimSelectInfoAutoStart == 1
+        augroup VimSelectInfo
+            "recordingによるレジスタの変更ができない。
+            autocmd TextYankPost * call VimSelectInfo#nextYankPost()
+        augroup end
+        call VimSelectInfo#openWindow()
+    endif
 endif
 
 "autocmd! TextYankPost * let g:VimSelectInfoEvent = deepcopy(v:event) | call VimSelectInfo#do(g:VimSelectInfoEvent)
