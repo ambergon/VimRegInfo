@@ -23,7 +23,11 @@ augroup end
 
 function! VimMarkerInfo#closeWindow()
     autocmd! VimMarkerInfo
-    execute("bw " . s:left_buffer_name)
+    if bufexists(s:left_buffer_name)
+        execute("bw " . s:left_buffer_name)
+    endif
+    call sign_unplace( 'local_group')
+    call sign_unplace( 'global_group')
 endfunction
 
 function! VimMarkerInfo#setWindow()

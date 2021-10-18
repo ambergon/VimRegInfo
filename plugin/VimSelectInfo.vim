@@ -21,7 +21,10 @@ endif
 let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 
-command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimSelectInfo#selectInfo('<args>')
+command! -nargs=? -complete=customlist,CompInfo SelectInfo call VimSelectInfo#selectInfo('<args>')
+command! -nargs=? -complete=customlist,CompInfo SelectInfoEdit call VimSelectInfo#selectInfoEdit('<args>')
+command! -nargs=1 -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
+
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
 command! -nargs=0 RegInfoWindowClean call VimSelectInfo#regClean()
 command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
@@ -49,7 +52,24 @@ function! VimSelectInfo#selectInfo( name )
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
     endif
-    call VimSelectInfo#setTemplate()
+    call VimSelectInfo#openWindow()
+endfunction
+
+function! VimSelectInfo#selectInfoEdit( name )
+    let l:file = g:VimSelectInfo . '/default_viminfo.vim'
+    if a:name != ''
+        let l:file = g:VimSelectInfo . '/' . a:name
+    endif
+    if filereadable(l:file)
+        execute("e " . l:file )
+    endif
+endfunction
+
+function! VimSelectInfo#selectInfoSave( name )
+    let l:file = g:VimSelectInfo . '/' . a:name
+    if filereadable(l:file)
+        execute("wviminfo! " . l:file )
+    endif
 endfunction
 
 function! VimSelectInfo#regExchange(reg_name)
@@ -64,7 +84,7 @@ function! VimSelectInfo#regExchange(reg_name)
         call setreg( a:reg_name[1], getreg(a:reg_name[0]))
         echo a:reg_name[0] . ' -> ' . a:reg_name[1]
     endif
-    call VimSelectInfo#setTemplate()
+    call VimSelectInfo#openWindow()
 endfunction
 
 function! VimSelectInfo#regClean()
@@ -95,7 +115,7 @@ function! VimSelectInfo#regClean()
     call setreg("x","")
     call setreg("y","")
     call setreg("z","")
-    call VimSelectInfo#setTemplate()
+    call VimSelectInfo#openWindow()
 endfunction
 
 function! VimSelectInfo#openWindow()
