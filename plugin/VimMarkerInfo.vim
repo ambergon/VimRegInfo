@@ -1,10 +1,11 @@
 """setting
 "let g:marker_window = 'abcde'
+"let g:mark_replace = [["","",""],["","","g"]]
 
-if exists('g:loaded_VimMarkerInfo')
-  finish
-endif
-let g:loaded_VimMarkerInfo = 1
+"if exists('g:loaded_VimMarkerInfo')
+"  finish
+"endif
+"let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -13,6 +14,11 @@ let s:left_buffer_name ='MarkerInfoWindow://'
 if !exists("g:marker_window")
     let g:marker_window=g:local_list
 endif
+
+if !exists("g:mark_replace")
+    let g:mark_replace =[["aaa","ggg",""],["aaa","aaa","g"]]
+endif
+
 
 command! -nargs=0 MarkerInfo call VimMarkerInfo#setWindow()
 command! -nargs=0 MarkerInfoOff call VimMarkerInfo#closeWindow()
@@ -78,7 +84,11 @@ endfunction
 function! VimMarkerInfo#Replace( text )
     let l:res = a:text
     let l:res = substitute( l:res ,"^ *","",'')
-    let l:res = substitute( l:res ,"^function","F",'')
+    for replace in len(g:mark_replace)
+        let l:res = substitute( l:res ,"fun","no","")
+        "let l:res = substitute( l:res ,g:replace[0],replace[1],replace[2])
+    endfor
+    "let l:res = substitute( l:res ,"^function","F",'')
     return l:res
 endfunction
 
