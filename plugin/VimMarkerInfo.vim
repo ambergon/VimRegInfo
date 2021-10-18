@@ -1,11 +1,10 @@
 """setting
-"
-"g:marker_window = 'abc...'
-"let g:VimMarkerInfoAutoStart = 1
-
-
 "let g:marker_window = 'abcde'
-let g:VimMarkerInfoAutoStart = 1
+
+if exists('g:loaded_VimMarkerInfo')
+  finish
+endif
+let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -15,21 +14,15 @@ if !exists("g:marker_window")
     let g:marker_window=g:local_list
 endif
 
+"command! -nargs=0 MarkStart call VimMarkerInfo#startup()
 
-command! -nargs=0 MarkStart call VimMarkerInfo#startup()
-
-"if g:VimMarkerInfoAutoStart == 1
-"    autocmd VimEnter * call VimMarkerInfo#startup()
-"endif
-autocmd! bufEnter * call VimMarkerInfo#signSet()
-autocmd! InsertLeave * call VimMarkerInfo#signSet()
-
-autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
-autocmd! WinEnter * call VimMarkerInfo#openMarkerWindow()
-autocmd! InsertLeave * call VimMarkerInfo#openMarkerWindow()
-
-
-
+augroup VimMarkerInfo
+    autocmd! VimEnter * call VimMarkerInfo#startup()
+    autocmd! bufEnter * call VimMarkerInfo#signSet()
+    "autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
+    autocmd! WinEnter * call VimMarkerInfo#openMarkerWindow()
+    autocmd! InsertLeave * call VimMarkerInfo#openMarkerWindow() | call VimMarkerInfo#signSet()
+augroup end
 
 function! VimMarkerInfo#startup()
     call VimMarkerInfo#setHighLight()
@@ -41,10 +34,12 @@ function! VimMarkerInfo#openMarkerWindow()
         let l:current_winID = win_getid()
         execute("aboveleft 30vs " . s:left_buffer_name)
 
-        autocmd! BufLeave <buffer> vert resize 30
-        autocmd! VimResized <buffer> vert resize 30
-        autocmd! BufWinLeave <buffer> vert resize 30
-        autocmd! BufWinEnter <buffer> vert resize 30
+        augroup left_window
+            autocmd! BufLeave <buffer> vert resize 30
+            autocmd! VimResized <buffer> vert resize 30
+            autocmd! BufWinLeave <buffer> vert resize 30
+            autocmd! BufWinEnter <buffer> vert resize 30
+        augroup end
 
         "qで終了
         nnoremap <buffer> q :q<CR>
@@ -141,49 +136,9 @@ function! VimMarkerInfo#setHighLight()
     endfor
 endfunction
 
-""グローバルマークはviminfoの下記
+""""vim info
+""Global
 "# File marks:
-
-"marksでは開いてなければファイル名が。
-"開いていれば行の内容がmarksコマンドで取得することができる。
-"
-"この行はなくても問題ない。
-"'B  21  0  ~\my_workspace\vim\VimGlobalSession\plugin\VimGlobalSession.vim
-"|4,65,21,0,1634133756,"~\\my_workspace\\vim\\VimGlobalSession\\plugin\\VimGlobalSession.vim"
-
-"|4,57,14,0,1634169111,"~\\my_workspace\\vim\\VimGlobalSession\\plugin\\VimGlobalSession.vim"
-
-
+""Local
 "# History of marks within files (newest to oldest):
-
-"> ~\my_workspace\vim\VimGlobalSession\VimMarkerInfo.vim
-"	*	1634170193	0
-"	"	13	0
-"	^	4	0
-"	.	4	0
-"	+	5	0
-"	+	4	0
-"	a	1	0
-"	b	2	0
-"	c	3	0
-"	d	4	0
-"	e	5	0
-"	f	6	0
-"	g	7	0
-"	h	8	0
-"	i	8	0
-"	j	9	0
-"	k	9	0
-"	l	10	0
-"	m	12	0
-"	n	11	0
-
-
-
-
-
-
-
-
-
 

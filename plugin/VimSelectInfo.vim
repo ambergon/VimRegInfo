@@ -3,10 +3,10 @@
 " Version: 0.0.1
 " VimSelectInfo
 
-"if exists('g:loaded_VimSelectInfo')
-"  finish
-"endif
-"let g:loaded_VimSelectInfo = 1
+if exists('g:loaded_VimSelectInfo')
+  finish
+endif
+let g:loaded_VimSelectInfo = 1
 
 ""setting
 "viminfoを管理するディレクトリ
@@ -21,8 +21,10 @@ endif
 
 let s:VimSelectInfoBuffer='RegInfoWindow://'
 
-"recordingによるレジスタの変更ができない。
-autocmd! TextYankPost * call VimSelectInfo#nextYankPost()
+augroup VimSelectInfo
+    "recordingによるレジスタの変更ができない。
+    autocmd! TextYankPost * call VimSelectInfo#nextYankPost()
+augroup end
 
 command! -nargs=? -complete=customlist,CompInfo ReadInfo call VimSelectInfo#selectInfo('<args>')
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
@@ -110,10 +112,12 @@ function! VimSelectInfo#openWindow()
         let l:current_winID = win_getid()
 
         execute("25vs " . s:VimSelectInfoBuffer)
-        autocmd! BufLeave <buffer> vert resize 25
-        autocmd! VimResized <buffer> vert resize 25
-        autocmd! BufWinEnter <buffer> vert resize 25
-        autocmd! BufWinLeave <buffer> vert resize 25
+        augroup right_window
+            autocmd! BufLeave <buffer> vert resize 25
+            autocmd! VimResized <buffer> vert resize 25
+            autocmd! BufWinEnter <buffer> vert resize 25
+            autocmd! BufWinLeave <buffer> vert resize 25
+        augroup end
 
         "qで終了
         nnoremap <buffer> q :q<CR>
