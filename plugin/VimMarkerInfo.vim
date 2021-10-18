@@ -2,10 +2,10 @@
 "let g:marker_window = 'abcde'
 "let g:mark_replace = [["","",""],["","","g"]]
 
-"if exists('g:loaded_VimMarkerInfo')
-"  finish
-"endif
-"let g:loaded_VimMarkerInfo = 1
+if exists('g:loaded_VimMarkerInfo')
+  finish
+endif
+let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -16,7 +16,7 @@ if !exists("g:marker_window")
 endif
 
 if !exists("g:mark_replace")
-    let g:mark_replace =[["aaa","ggg",""],["aaa","aaa","g"]]
+    let g:mark_replace =[["","",""]]
 endif
 
 
@@ -41,7 +41,7 @@ function! VimMarkerInfo#setWindow()
     call VimMarkerInfo#signSet()
     augroup VimMarkerInfo
         autocmd bufEnter * call VimMarkerInfo#signSet()
-        "autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
+        autocmd bufWinEnter * call VimMarkerInfo#openMarkerWindow()
         autocmd WinEnter * call VimMarkerInfo#openMarkerWindow()
         autocmd InsertLeave * call VimMarkerInfo#openMarkerWindow() | call VimMarkerInfo#signSet()
     augroup end
@@ -84,11 +84,9 @@ endfunction
 function! VimMarkerInfo#Replace( text )
     let l:res = a:text
     let l:res = substitute( l:res ,"^ *","",'')
-    for replace in len(g:mark_replace)
-        let l:res = substitute( l:res ,"fun","no","")
-        "let l:res = substitute( l:res ,g:replace[0],replace[1],replace[2])
+    for l:replace in g:mark_replace
+        let l:res = substitute( l:res ,replace[0],replace[1],replace[2])
     endfor
-    "let l:res = substitute( l:res ,"^function","F",'')
     return l:res
 endfunction
 
