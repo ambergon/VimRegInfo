@@ -1,10 +1,10 @@
 """setting
 "let g:marker_window = 'abcde'
 
-if exists('g:loaded_VimMarkerInfo')
-  finish
-endif
-let g:loaded_VimMarkerInfo = 1
+"if exists('g:loaded_VimMarkerInfo')
+"  finish
+"endif
+"let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -23,17 +23,18 @@ augroup end
 
 function! VimMarkerInfo#closeWindow()
     autocmd! VimMarkerInfo
-    execute("bd " . s:left_buffer_name)
+    execute("bw " . s:left_buffer_name)
 endfunction
 
 function! VimMarkerInfo#setWindow()
+    call VimMarkerInfo#openMarkerWindow()
+    call VimMarkerInfo#signSet()
     augroup VimMarkerInfo
         autocmd bufEnter * call VimMarkerInfo#signSet()
         "autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
         autocmd WinEnter * call VimMarkerInfo#openMarkerWindow()
         autocmd InsertLeave * call VimMarkerInfo#openMarkerWindow() | call VimMarkerInfo#signSet()
     augroup end
-    call VimMarkerInfo#signSet()
 endfunction
 
 
