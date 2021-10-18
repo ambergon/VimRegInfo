@@ -1,18 +1,22 @@
 """setting
-"let g:marker_window = 'abcde'
+"let g:marker_window_local = 'abcde'
+"let g:marker_window_global = 'ABCDE'
 "let g:mark_replace = [["","",""],["","","g"]]
 
-if exists('g:loaded_VimMarkerInfo')
-  finish
-endif
-let g:loaded_VimMarkerInfo = 1
+"if exists('g:loaded_VimMarkerInfo')
+"  finish
+"endif
+"let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 let s:left_buffer_name ='MarkerInfoWindow://'
 
-if !exists("g:marker_window")
-    let g:marker_window=g:local_list
+if !exists("g:marker_window_local")
+    let g:marker_window_local=g:local_list
+endif
+if !exists("g:marker_window_global")
+    let g:marker_window_global=g:global_list
 endif
 
 if !exists("g:mark_replace")
@@ -106,7 +110,7 @@ function! VimMarkerInfo#windowAppendLines()
     
     ""local
     let l:x=0
-    for l:local_word in g:marker_window
+    for l:local_word in g:marker_window_local
         if getpos("'" . l:local_word)[1] != 0
             let l:x = l:x+1
             call setbufline(s:left_buffer_name,  l:x, VimMarkerInfo#windowLocalMark(l:local_word))
@@ -115,7 +119,7 @@ function! VimMarkerInfo#windowAppendLines()
     let l:x = l:x+1
     call setbufline(s:left_buffer_name,  l:x, "=============================")
     ""global
-    for l:global_word in g:global_list
+    for l:global_word in g:marker_window_global
         if getpos("'" . l:global_word)[1] != 0
             let l:x = l:x+1
             call setbufline(s:left_buffer_name,  l:x, VimMarkerInfo#windowGlobalMark(l:global_word))
