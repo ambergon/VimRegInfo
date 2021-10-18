@@ -14,7 +14,6 @@ let g:loaded_VimSelectInfo = 1
 "1で自動起動
 "let g:VimSelectInfoAutoStart = 1
 
-let g:VimSelectInfoAutoStart = 1
 if !exists("g:VimSelectInfo")
     let g:VimSelectInfo=expand("~/.cache/viminfo")
 endif
