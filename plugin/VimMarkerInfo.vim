@@ -26,7 +26,7 @@ augroup end
 
 function! VimMarkerInfo#startup()
     call VimMarkerInfo#setHighLight()
-    call VimMarkerInfo#openMarkerWindow()
+    "call VimMarkerInfo#openMarkerWindow()
 endfunction
 
 function! VimMarkerInfo#openMarkerWindow()
