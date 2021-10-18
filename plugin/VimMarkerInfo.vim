@@ -14,17 +14,28 @@ if !exists("g:marker_window")
     let g:marker_window=g:local_list
 endif
 
-"command! -nargs=0 MarkStart call VimMarkerInfo#startup()
+command! -nargs=0 MarkerInfo call VimMarkerInfo#setWindow()
+command! -nargs=0 MarkerInfoOff call VimMarkerInfo#closeWindow()
 
-augroup VimMarkerInfo
-    autocmd! VimEnter * call VimMarkerInfo#startup()
-    autocmd! bufEnter * call VimMarkerInfo#signSet()
-    "autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
-    autocmd! WinEnter * call VimMarkerInfo#openMarkerWindow()
-    autocmd! InsertLeave * call VimMarkerInfo#openMarkerWindow() | call VimMarkerInfo#signSet()
-augroup end
+augroup VimMarkerInfoSetup
+    autocmd VimEnter * call VimMarkerInfo#setup()
+endfunction
 
-function! VimMarkerInfo#startup()
+function! VimMarkerInfo#closeWindow()
+    autocmd! VimMarkerInfo
+endfunction
+
+function! VimMarkerInfo#setWindow()
+    augroup VimMarkerInfo
+        autocmd bufEnter * call VimMarkerInfo#signSet()
+        "autocmd! bufWinEnter * call VimMarkerInfo#openMarkerWindow()
+        autocmd WinEnter * call VimMarkerInfo#openMarkerWindow()
+        autocmd InsertLeave * call VimMarkerInfo#openMarkerWindow() | call VimMarkerInfo#signSet()
+    augroup end
+endfunction
+
+
+function! VimMarkerInfo#setup()
     call VimMarkerInfo#setHighLight()
     "call VimMarkerInfo#openMarkerWindow()
 endfunction
@@ -35,10 +46,10 @@ function! VimMarkerInfo#openMarkerWindow()
         execute("aboveleft 30vs " . s:left_buffer_name)
 
         augroup left_window
-            autocmd! BufLeave <buffer> vert resize 30
-            autocmd! VimResized <buffer> vert resize 30
-            autocmd! BufWinLeave <buffer> vert resize 30
-            autocmd! BufWinEnter <buffer> vert resize 30
+            autocmd BufLeave <buffer> vert resize 30
+            autocmd VimResized <buffer> vert resize 30
+            autocmd BufWinLeave <buffer> vert resize 30
+            autocmd BufWinEnter <buffer> vert resize 30
         augroup end
 
         "qで終了
