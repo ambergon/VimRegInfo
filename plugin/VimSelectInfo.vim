@@ -3,10 +3,10 @@
 " Version: 0.0.1
 " VimSelectInfo
 
-if exists('g:loaded_VimSelectInfo')
-  finish
-endif
-let g:loaded_VimSelectInfo = 1
+"if exists('g:loaded_VimSelectInfo')
+"  finish
+"endif
+"let g:loaded_VimSelectInfo = 1
 
 ""setting
 "viminfoを管理するディレクトリ
@@ -68,6 +68,15 @@ endfunction
 function! VimSelectInfo#selectInfoSave( name )
     let l:file = g:VimSelectInfo . '/' . a:name
     if filereadable(l:file)
+        echo 'overwrite? y / other'
+        let l:c = getcharstr()
+        if l:c == 'Y' || l:c == 'y'
+            execute("wviminfo! " . l:file )
+            echo 'done'
+        else
+            echo 'do not'
+        endif
+    else
         execute("wviminfo! " . l:file )
     endif
 endfunction
