@@ -23,7 +23,7 @@ let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 command! -nargs=? -complete=customlist,CompInfo SelectInfo call VimSelectInfo#selectInfo('<args>')
 command! -nargs=? -complete=customlist,CompInfo SelectInfoEdit call VimSelectInfo#selectInfoEdit('<args>')
-command! -nargs=1 -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
+command! -nargs=? -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
 
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
 command! -nargs=0 RegInfoWindowClean call VimSelectInfo#regClean()
@@ -66,7 +66,10 @@ function! VimSelectInfo#selectInfoEdit( name )
 endfunction
 
 function! VimSelectInfo#selectInfoSave( name )
-    let l:file = g:VimSelectInfo . '/' . a:name
+    let l:file = g:VimSelectInfo . '/default_viminfo.vim'
+    if a:name != ''
+        let l:file = g:VimSelectInfo . '/' . a:name
+    endif
     if filereadable(l:file)
         echo 'overwrite? y / other'
         let l:c = getcharstr()
