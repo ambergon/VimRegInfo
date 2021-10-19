@@ -67,6 +67,7 @@ function! VimMarkerInfo#openMarkerWindow()
             autocmd VimResized <buffer> vert resize 30
             autocmd BufWinLeave <buffer> vert resize 30
             autocmd BufWinEnter <buffer> vert resize 30
+            autocmd QuitPre <buffer> call VimMarkerInfo#closeWindow()
         augroup end
 
         "qで終了
