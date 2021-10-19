@@ -143,6 +143,7 @@ function! VimSelectInfo#openWindow()
             autocmd BufWinEnter <buffer> vert resize 25
             autocmd BufWinLeave <buffer> vert resize 25
             autocmd QuitPre * call VimSelectInfo#checkBufList()
+            autocmd TextYankPost * call VimSelectInfo#nextYankPost()
         augroup end
 
         "qで終了
@@ -213,10 +214,6 @@ endfunction
 
 if exists("g:VimSelectInfoAutoStart")
     if g:VimSelectInfoAutoStart == 1
-        augroup VimSelectInfo
-            "recordingによるレジスタの変更ができない。
-            autocmd TextYankPost * call VimSelectInfo#nextYankPost()
-        augroup end
         call VimSelectInfo#openWindow()
     endif
 endif
