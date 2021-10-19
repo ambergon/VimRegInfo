@@ -10,7 +10,7 @@ let g:loaded_VimMarkerInfo = 1
 
 let g:local_list ='abcdefghijklmnopqrstuvwxyz'
 let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-let s:left_buffer_name ='MarkerInfoWindow://'
+let g:VimMarkerInfoBuffer ='MarkerInfoWindow://'
 
 if !exists("g:marker_window_local")
     let g:marker_window_local=g:local_list
@@ -31,13 +31,23 @@ augroup VimMarkerInfoSetup
     autocmd VimEnter * call VimMarkerInfo#setup()
 augroup end
 
+"function! VimMarkerInfo#quitBuffer()
+"    let l:list = tabpagebuflist()
+"    if len(l:list) == 2
+"        if bufexists(g:VimMarkerInfoBuffer)
+"            call VimMarkerInfo#closeWindow()
+"        endif
+"    endif
+"endfunction
+
 function! VimMarkerInfo#closeWindow()
-    autocmd! VimMarkerInfo
-    if bufexists(s:left_buffer_name)
-        execute("bw " . s:left_buffer_name)
-    endif
     call sign_unplace( 'local_group')
     call sign_unplace( 'global_group')
+    autocmd! left_window
+    autocmd! VimMarkerInfo
+    if bufexists(g:VimMarkerInfoBuffer)
+        execute("bw " . g:VimMarkerInfoBuffer)
+    endif
 endfunction
 
 function! VimMarkerInfo#setWindow()
@@ -58,16 +68,16 @@ function! VimMarkerInfo#setup()
 endfunction
 
 function! VimMarkerInfo#openMarkerWindow()
-    if !bufexists(s:left_buffer_name)
+    if !bufexists(g:VimMarkerInfoBuffer)
         let l:current_winID = win_getid()
-        execute("aboveleft 30vs " . s:left_buffer_name)
+        execute("aboveleft 30vs " . g:VimMarkerInfoBuffer)
 
         augroup left_window
             autocmd BufLeave <buffer> vert resize 30
             autocmd VimResized <buffer> vert resize 30
             autocmd BufWinLeave <buffer> vert resize 30
             autocmd BufWinEnter <buffer> vert resize 30
-            autocmd QuitPre <buffer> call VimMarkerInfo#closeWindow()
+            "autocmd QuitPre * call VimMarkerInfo#quitBuffer()
         augroup end
 
         "qで終了
@@ -107,23 +117,23 @@ endfunction
 
 function! VimMarkerInfo#windowAppendLines()
     "clean
-    call deletebufline(s:left_buffer_name,1,"$")
+    call deletebufline(g:VimMarkerInfoBuffer,1,"$")
     
     ""local
     let l:x=0
     for l:local_word in g:marker_window_local
         if getpos("'" . l:local_word)[1] != 0
             let l:x = l:x+1
-            call setbufline(s:left_buffer_name,  l:x, VimMarkerInfo#windowLocalMark(l:local_word))
+            call setbufline(g:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowLocalMark(l:local_word))
         endif
     endfor
     let l:x = l:x+1
-    call setbufline(s:left_buffer_name,  l:x, "=============================")
+    call setbufline(g:VimMarkerInfoBuffer,  l:x, "=============================")
     ""global
     for l:global_word in g:marker_window_global
         if getpos("'" . l:global_word)[1] != 0
             let l:x = l:x+1
-            call setbufline(s:left_buffer_name,  l:x, VimMarkerInfo#windowGlobalMark(l:global_word))
+            call setbufline(g:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowGlobalMark(l:global_word))
         endif
     endfor
 endfunction

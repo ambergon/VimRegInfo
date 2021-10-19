@@ -117,6 +117,20 @@ function! VimSelectInfo#regClean()
     call setreg("z","")
     call VimSelectInfo#openWindow()
 endfunction
+function! VimSelectInfo#checkBufList()
+    let l:list = tabpagebuflist()
+    if len(l:list) == 2
+        if bufexists(s:VimSelectInfoBuffer)
+            execute("bw " . s:VimSelectInfoBuffer)
+        endif
+    "elseif len(l:list) == 3
+    "    if bufexists(s:VimSelectInfoBuffer) && bufexists(g:VimMarkerInfoBuffer)
+    "        echo ''
+    "        execute("bw " . s:VimSelectInfoBuffer)
+    "        execute("bw " . g:VimMarkerInfoBuffer)
+    "    endif
+    endif
+endfunction
 
 function! VimSelectInfo#openWindow()
     if !bufexists(s:VimSelectInfoBuffer)
@@ -128,6 +142,7 @@ function! VimSelectInfo#openWindow()
             autocmd VimResized <buffer> vert resize 25
             autocmd BufWinEnter <buffer> vert resize 25
             autocmd BufWinLeave <buffer> vert resize 25
+            autocmd QuitPre * call VimSelectInfo#checkBufList()
         augroup end
 
         "qで終了
