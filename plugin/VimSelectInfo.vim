@@ -15,9 +15,9 @@
 "let g:VimSelectInfoAutoStart = 1
 
 if !exists("g:VimSelectInfoDir")
-    let l:VimSelectInfo=expand("~/.cache/viminfo")
+    let s:VimSelectInfo=expand("~/.cache/viminfo")
 else
-    let l:VimSelectInfo=expand(g:VimSelectInfoDir)
+    let s:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
 
 let s:VimSelectInfoBuffer='RegInfoWindow://'
@@ -33,7 +33,7 @@ command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
 
 function! CompInfo(lead, line, pos )
     let l:matches = []
-    let l:dir = l:VimSelectInfo
+    let l:dir = s:VimSelectInfo
     let l:sep = fnamemodify(',' , ':p')[-1:]
     let l:Filter = { file -> !isdirectory( l:dir . l:sep . file ) }
     let l:files = readdir( l:dir , l:Filter )
@@ -47,9 +47,9 @@ function! CompInfo(lead, line, pos )
 endfunction
 
 function! VimSelectInfo#selectInfo( name )
-    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = l:VimSelectInfo . '/' . a:name
+        let l:file = s:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
@@ -58,9 +58,9 @@ function! VimSelectInfo#selectInfo( name )
 endfunction
 
 function! VimSelectInfo#selectInfoEdit( name )
-    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = l:VimSelectInfo . '/' . a:name
+        let l:file = s:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         execute("e " . l:file )
@@ -68,9 +68,9 @@ function! VimSelectInfo#selectInfoEdit( name )
 endfunction
 
 function! VimSelectInfo#selectInfoSave( name )
-    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = l:VimSelectInfo . '/' . a:name
+        let l:file = s:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         echo 'overwrite? y / other'
