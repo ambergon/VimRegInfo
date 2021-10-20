@@ -10,12 +10,14 @@
 
 ""setting
 "viminfoを管理するディレクトリ
-"let g:VimSelectInfo=expand("~/.cache/viminfo")
+"let g:VimSelectInfoDir="~/.cache/viminfo"
 "1で自動起動
 "let g:VimSelectInfoAutoStart = 1
 
-if !exists("g:VimSelectInfo")
-    let g:VimSelectInfo=expand("~/.cache/viminfo")
+if !exists("g:VimSelectInfoDir")
+    let l:VimSelectInfo=expand("~/.cache/viminfo")
+else
+    let l:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
 
 let s:VimSelectInfoBuffer='RegInfoWindow://'
@@ -31,7 +33,7 @@ command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
 
 function! CompInfo(lead, line, pos )
     let l:matches = []
-    let l:dir = g:VimSelectInfo
+    let l:dir = l:VimSelectInfo
     let l:sep = fnamemodify(',' , ':p')[-1:]
     let l:Filter = { file -> !isdirectory( l:dir . l:sep . file ) }
     let l:files = readdir( l:dir , l:Filter )
@@ -45,9 +47,9 @@ function! CompInfo(lead, line, pos )
 endfunction
 
 function! VimSelectInfo#selectInfo( name )
-    let l:file = g:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = g:VimSelectInfo . '/' . a:name
+        let l:file = l:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
@@ -56,9 +58,9 @@ function! VimSelectInfo#selectInfo( name )
 endfunction
 
 function! VimSelectInfo#selectInfoEdit( name )
-    let l:file = g:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = g:VimSelectInfo . '/' . a:name
+        let l:file = l:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         execute("e " . l:file )
@@ -66,9 +68,9 @@ function! VimSelectInfo#selectInfoEdit( name )
 endfunction
 
 function! VimSelectInfo#selectInfoSave( name )
-    let l:file = g:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = l:VimSelectInfo . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = g:VimSelectInfo . '/' . a:name
+        let l:file = l:VimSelectInfo . '/' . a:name
     endif
     if filereadable(l:file)
         echo 'overwrite? y / other'
