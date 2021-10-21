@@ -20,6 +20,7 @@ else
     let s:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
 
+let g:SelectInfoWindowSize =55
 let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 
@@ -150,12 +151,12 @@ function! VimSelectInfo#openWindow()
     if !bufexists(s:VimSelectInfoBuffer)
         let l:current_winID = win_getid()
 
-        execute("25vs " . s:VimSelectInfoBuffer)
+        execute(g:SelectInfoWindowSize . "vs " . s:VimSelectInfoBuffer)
         augroup right_window
-            autocmd BufLeave <buffer> vert resize 25
-            autocmd VimResized <buffer> vert resize 25
-            autocmd BufWinEnter <buffer> vert resize 25
-            autocmd BufWinLeave <buffer> vert resize 25
+            autocmd BufLeave <buffer> vert resize g:SelectInfoWindowSize
+            autocmd VimResized <buffer> vert resize g:SelectInfoWindowSize
+            autocmd BufWinEnter <buffer> vert resize g:SelectInfoWindowSize
+            autocmd BufWinLeave <buffer> vert resize g:SelectInfoWindowSize
             autocmd QuitPre * call VimSelectInfo#checkBufList()
             autocmd TextYankPost * call VimSelectInfo#nextYankPost()
         augroup end
