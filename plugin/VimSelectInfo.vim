@@ -3,10 +3,10 @@
 " Version: 0.0.1
 " VimSelectInfo
 
-"if exists('g:loaded_VimSelectInfo')
-"  finish
-"endif
-"let g:loaded_VimSelectInfo = 1
+if exists('g:loaded_VimSelectInfo')
+  finish
+endif
+let g:loaded_VimSelectInfo = 1
 
 ""setting
 "viminfoを管理するディレクトリ
@@ -22,10 +22,8 @@ else
     let s:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
 
-if exists("g:SelectInfoWindowSize")
-    let s:windowSize = g:SelectInfoWindowSize 
-else
-    let s:windowSize =25
+if !exists("g:SelectInfoWindowSize")
+    let g:SelectInfoWindowSize =25
 endif
 
 
@@ -160,12 +158,12 @@ function! VimSelectInfo#openWindow()
     if !bufexists(s:VimSelectInfoBuffer)
         let l:current_winID = win_getid()
 
-        execute(s:windowSize . "vs " . s:VimSelectInfoBuffer)
+        execute(g:SelectInfoWindowSize . "vs " . s:VimSelectInfoBuffer)
         augroup right_window
-            execute("autocmd BufLeave <buffer> vert resize " . s:windowSize)
-            execute("autocmd VimResized <buffer> vert resize " . s:windowSize)
-            execute("autocmd BufWinEnter <buffer> vert resize " . s:windowSize)
-            execute("autocmd BufWinLeave <buffer> vert resize " . s:windowSize)
+            execute("autocmd BufLeave <buffer> vert resize " . g:SelectInfoWindowSize)
+            execute("autocmd VimResized <buffer> vert resize " . g:SelectInfoWindowSize)
+            execute("autocmd BufWinEnter <buffer> vert resize " . g:SelectInfoWindowSize)
+            execute("autocmd BufWinLeave <buffer> vert resize " . g:SelectInfoWindowSize)
             autocmd QuitPre * call VimSelectInfo#checkBufList()
             autocmd TextYankPost * call VimSelectInfo#nextYankPost()
         augroup end

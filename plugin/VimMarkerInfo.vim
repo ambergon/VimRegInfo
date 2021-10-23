@@ -2,7 +2,7 @@
 "let g:marker_window_local = 'abcde'
 "let g:marker_window_global = 'ABCDE'
 "let g:mark_replace = [["","",""],["","","g"]]
-"let g:MarkerInfoWindowSize
+"let g:MarkerInfoWindowSize =30
 
 if exists('g:loaded_VimMarkerInfo')
   finish
@@ -24,10 +24,8 @@ if !exists("g:mark_replace")
     let g:mark_replace =[["","",""]]
 endif
 
-if exists("g:MarkerInfoWindowSize")
-    let s:windowSize = g:SelectInfoWindowSize 
-else
-    let s:windowSize =30
+if !exists("g:MarkerInfoWindowSize")
+    let g:MarkerInfoWindowSize =30
 endif
 
 
@@ -77,13 +75,13 @@ endfunction
 function! VimMarkerInfo#openMarkerWindow()
     if !bufexists(s:VimMarkerInfoBuffer)
         let l:current_winID = win_getid()
-        execute("aboveleft " . s:windowSize . "vs " . s:VimMarkerInfoBuffer)
+        execute('aboveleft ' . g:MarkerInfoWindowSize . 'vs ' . s:VimMarkerInfoBuffer)
 
         augroup left_window
-            execute("autocmd BufLeave <buffer> vert resize " . s:windowSize)
-            execute("autocmd VimResized <buffer> vert resize ". s:windowSize)
-            execute("autocmd BufWinLeave <buffer> vert resize " . s:windowSize)
-            execute("autocmd BufWinEnter <buffer> vert resize " . s:windowSize)
+            execute("autocmd BufLeave <buffer> vert resize " . g:MarkerInfoWindowSize)
+            execute("autocmd VimResized <buffer> vert resize " . g:MarkerInfoWindowSize)
+            execute("autocmd BufWinLeave <buffer> vert resize " . g:MarkerInfoWindowSize)
+            execute("autocmd BufWinEnter <buffer> vert resize " . g:MarkerInfoWindowSize)
             "autocmd QuitPre * call VimMarkerInfo#quitBuffer()
         augroup end
 
