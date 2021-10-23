@@ -2,25 +2,32 @@
 "let g:marker_window_local = 'abcde'
 "let g:marker_window_global = 'ABCDE'
 "let g:mark_replace = [["","",""],["","","g"]]
+"let g:MarkerInfoWindowSize
 
 if exists('g:loaded_VimMarkerInfo')
   finish
 endif
 let g:loaded_VimMarkerInfo = 1
 
-let g:local_list ='abcdefghijklmnopqrstuvwxyz'
-let g:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-let g:VimMarkerInfoBuffer ='MarkerInfoWindow://'
+let s:local_list ='abcdefghijklmnopqrstuvwxyz'
+let s:global_list ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+let s:VimMarkerInfoBuffer ='MarkerInfoWindow://'
 
 if !exists("g:marker_window_local")
-    let g:marker_window_local=g:local_list
+    let g:marker_window_local=s:local_list
 endif
 if !exists("g:marker_window_global")
-    let g:marker_window_global=g:global_list
+    let g:marker_window_global=s:global_list
 endif
 
 if !exists("g:mark_replace")
     let g:mark_replace =[["","",""]]
+endif
+
+if exists("g:MarkerInfoWindowSize")
+    let s:windowSize = g:SelectInfoWindowSize 
+else
+    let s:windowSize =30
 endif
 
 
@@ -34,7 +41,7 @@ augroup end
 "function! VimMarkerInfo#quitBuffer()
 "    let l:list = tabpagebuflist()
 "    if len(l:list) == 2
-"        if bufexists(g:VimMarkerInfoBuffer)
+"        if bufexists(s:VimMarkerInfoBuffer)
 "            call VimMarkerInfo#closeWindow()
 "        endif
 "    endif
@@ -45,8 +52,8 @@ function! VimMarkerInfo#closeWindow()
     call sign_unplace( 'global_group')
     autocmd! left_window
     autocmd! VimMarkerInfo
-    if bufexists(g:VimMarkerInfoBuffer)
-        execute("bw " . g:VimMarkerInfoBuffer)
+    if bufexists(s:VimMarkerInfoBuffer)
+        execute("bw " . s:VimMarkerInfoBuffer)
     endif
 endfunction
 
@@ -68,15 +75,15 @@ function! VimMarkerInfo#setup()
 endfunction
 
 function! VimMarkerInfo#openMarkerWindow()
-    if !bufexists(g:VimMarkerInfoBuffer)
+    if !bufexists(s:VimMarkerInfoBuffer)
         let l:current_winID = win_getid()
-        execute("aboveleft 30vs " . g:VimMarkerInfoBuffer)
+        execute("aboveleft " . s:windowSize . "vs " . s:VimMarkerInfoBuffer)
 
         augroup left_window
-            autocmd BufLeave <buffer> vert resize 30
-            autocmd VimResized <buffer> vert resize 30
-            autocmd BufWinLeave <buffer> vert resize 30
-            autocmd BufWinEnter <buffer> vert resize 30
+            execute("autocmd BufLeave <buffer> vert resize " . s:windowSize)
+            execute("autocmd VimResized <buffer> vert resize ". s:windowSize)
+            execute("autocmd BufWinLeave <buffer> vert resize " . s:windowSize)
+            execute("autocmd BufWinEnter <buffer> vert resize " . s:windowSize)
             "autocmd QuitPre * call VimMarkerInfo#quitBuffer()
         augroup end
 
@@ -117,23 +124,23 @@ endfunction
 
 function! VimMarkerInfo#windowAppendLines()
     "clean
-    call deletebufline(g:VimMarkerInfoBuffer,1,"$")
+    call deletebufline(s:VimMarkerInfoBuffer,1,"$")
     
     ""local
     let l:x=0
     for l:local_word in g:marker_window_local
         if getpos("'" . l:local_word)[1] != 0
             let l:x = l:x+1
-            call setbufline(g:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowLocalMark(l:local_word))
+            call setbufline(s:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowLocalMark(l:local_word))
         endif
     endfor
     let l:x = l:x+1
-    call setbufline(g:VimMarkerInfoBuffer,  l:x, "=============================")
+    call setbufline(s:VimMarkerInfoBuffer,  l:x, "=============================")
     ""global
     for l:global_word in g:marker_window_global
         if getpos("'" . l:global_word)[1] != 0
             let l:x = l:x+1
-            call setbufline(g:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowGlobalMark(l:global_word))
+            call setbufline(s:VimMarkerInfoBuffer,  l:x, VimMarkerInfo#windowGlobalMark(l:global_word))
         endif
     endfor
 endfunction
@@ -143,14 +150,14 @@ function! VimMarkerInfo#signSet()
     call sign_unplace( 'local_group')
     call sign_unplace( 'global_group')
     
-    for l:local_word in g:local_list
+    for l:local_word in s:local_list
         if getpos("'" . l:local_word)[1] != 0
             call sign_place( 0, 'local_group', 'local_' . l:local_word, bufnr(),{'lnum' : getpos("'" . l:local_word)[1], 'priority' : 10 })
         endif
     endfor
     
     ""global_mark
-    for l:global_word in g:global_list
+    for l:global_word in s:global_list
         "getpos = 0行 = 未設定 だとエラー
         if getpos("'" . l:global_word)[1] != 0
             "getBufnum = current
@@ -168,11 +175,11 @@ function! VimMarkerInfo#setHighLight()
     hi GlobalMark ctermfg=113 ctermbg=175 guifg=#87df5f guibg=#df87af
 
     "local_mark
-    for s:local_word in g:local_list
+    for s:local_word in s:local_list
         call sign_define("local_" . s:local_word,{"text" : s:local_word . ">", "texthl" : "LocalMark"})
     endfor
     "global_mark
-    for l:global_word in g:global_list
+    for l:global_word in s:global_list
         call sign_define("global_" . l:global_word,{"text" : l:global_word . ">", "texthl" : "GlobalMark"})
     endfor
 endfunction

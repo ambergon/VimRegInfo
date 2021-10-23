@@ -14,7 +14,7 @@
 "1で自動起動
 "let g:VimSelectInfoAutoStart = 1
 "サイズ指定
-"let g:SelectInfoWindowSize =40
+"let g:SelectInfoWindowSize =25
 
 if !exists("g:VimSelectInfoDir")
     let s:VimSelectInfo=expand("~/.cache/viminfo")
