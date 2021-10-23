@@ -13,6 +13,8 @@
 "let g:VimSelectInfoDir="~/.cache/viminfo"
 "1で自動起動
 "let g:VimSelectInfoAutoStart = 1
+"サイズ指定
+"let g:SelectInfoWindowSize =40
 
 if !exists("g:VimSelectInfoDir")
     let s:VimSelectInfo=expand("~/.cache/viminfo")
@@ -20,7 +22,14 @@ else
     let s:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
 
-let g:SelectInfoWindowSize =55
+if exists("g:SelectInfoWindowSize")
+    let s:windowSize = g:SelectInfoWindowSize 
+else
+    let s:windowSize =25
+endif
+
+
+
 let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 
@@ -151,12 +160,12 @@ function! VimSelectInfo#openWindow()
     if !bufexists(s:VimSelectInfoBuffer)
         let l:current_winID = win_getid()
 
-        execute(g:SelectInfoWindowSize . "vs " . s:VimSelectInfoBuffer)
+        execute(s:windowSize . "vs " . s:VimSelectInfoBuffer)
         augroup right_window
-            autocmd BufLeave <buffer> vert resize g:SelectInfoWindowSize
-            autocmd VimResized <buffer> vert resize g:SelectInfoWindowSize
-            autocmd BufWinEnter <buffer> vert resize g:SelectInfoWindowSize
-            autocmd BufWinLeave <buffer> vert resize g:SelectInfoWindowSize
+            execute("autocmd BufLeave <buffer> vert resize " . s:windowSize)
+            execute("autocmd VimResized <buffer> vert resize " . s:windowSize)
+            execute("autocmd BufWinEnter <buffer> vert resize " . s:windowSize)
+            execute("autocmd BufWinLeave <buffer> vert resize " . s:windowSize)
             autocmd QuitPre * call VimSelectInfo#checkBufList()
             autocmd TextYankPost * call VimSelectInfo#nextYankPost()
         augroup end
