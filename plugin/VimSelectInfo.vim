@@ -21,6 +21,7 @@ command! -nargs=? -complete=customlist,CompInfo SelectInfoEdit call VimSelectInf
 command! -nargs=? -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
 
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
+command! -nargs=0 RegInfoWindowOff call VimSelectInfo#closeWindow()
 command! -nargs=0 RegInfoWindowClean call VimSelectInfo#regClean()
 command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
 

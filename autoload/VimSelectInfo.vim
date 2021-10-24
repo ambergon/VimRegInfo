@@ -94,13 +94,19 @@ function! VimSelectInfo#regClean()
     call setreg("z","")
     call VimSelectInfo#openWindow()
 endfunction
+
 function! VimSelectInfo#checkBufList()
     let l:list = tabpagebuflist()
     if len(l:list) == 2
+        call VimSelectInfo#closeWindow()
+    endif
+endfunction
+
+function! VimSelectInfo#closeWindow()
+        autocmd! right_window
         if bufexists(s:VimSelectInfoBuffer)
             execute("bw " . s:VimSelectInfoBuffer)
         endif
-    endif
 endfunction
 
 function! VimSelectInfo#openWindow()
@@ -131,6 +137,12 @@ function! VimSelectInfo#openWindow()
         call win_gotoid(l:current_winID)
     endif
     call VimSelectInfo#setTemplate()
+endfunction
+
+function! VimSelectInfo#nextYankPost()
+    augroup right_window
+        autocmd SafeState * ++once call VimSelectInfo#openWindow()
+    augroup end
 endfunction
 
 function! VimSelectInfo#setReplace(reg_name)
@@ -177,8 +189,3 @@ function! VimSelectInfo#setTemplate()
     call setbufline(s:VimSelectInfoBuffer,  36, 'B:' . VimSelectInfo#setReplace('b'))
 endfunction
 
-function! VimSelectInfo#nextYankPost()
-    augroup VimSelectInfo
-        autocmd SafeState * ++once call VimSelectInfo#openWindow()
-    augroup end
-endfunction
