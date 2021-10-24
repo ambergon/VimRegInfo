@@ -55,7 +55,7 @@ function! VimSelectInfo#regExchange(reg_name)
     if l:count == 1
         "引数を一文字として扱いレジスタ名に。
         "無名レジスタの中身を指定レジスタに。
-        call setreg( a:reg_name, getreg("*"))
+        call setreg( a:reg_name, getreg(""))
         echo '* -> ' . a:reg_name
     else
         "２文字目を一文字目のレジスタに。
@@ -66,7 +66,7 @@ function! VimSelectInfo#regExchange(reg_name)
 endfunction
 
 function! VimSelectInfo#regClean()
-    call setreg("*","")
+    call setreg("","")
     call setreg("a","")
     call setreg("b","")
     call setreg("c","")
@@ -153,7 +153,7 @@ endfunction
 
 function! VimSelectInfo#setTemplate()
     call setbufline(s:VimSelectInfoBuffer,  1, '====================' )
-    call setbufline(s:VimSelectInfoBuffer,  2, '*:' . VimSelectInfo#setReplace('*'))
+    call setbufline(s:VimSelectInfoBuffer,  2, '*:' . VimSelectInfo#setReplace(''))
     call setbufline(s:VimSelectInfoBuffer,  3, '====================' )
     call setbufline(s:VimSelectInfoBuffer,  4, 'Y:' . VimSelectInfo#setReplace('y'))
     call setbufline(s:VimSelectInfoBuffer,  5, 'U:' . VimSelectInfo#setReplace('u'))
