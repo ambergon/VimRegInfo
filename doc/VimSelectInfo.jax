@@ -1,0 +1,186 @@
+*VimSelectInfo.txt*	日本語ヘルプ
+
+Version :
+Author  : ambergon
+License : MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+==============================================================================
+目次						*VimSelectInfo-contents*
+
+概要				|VimSelectInfo-introduction|
+使い方				|VimSelectInfo-usage|
+インターフェイス		|VimSelectInfo-interface|
+  変数				  |VimSelectInfo-variables|
+  コマンド			  |VimSelectInfo-commands|
+  キーマッピング		  |VimSelectInfo-key-mappings|
+  関数				  |VimSelectInfo-functions|
+TODO				|VimSelectInfo-todo|
+更新履歴			|VimSelectInfo-changelog|
+
+
+==============================================================================
+概要						*VimSelectInfo-introduction*
+
+*VimSelectInfo*
+レジスタやviminfoを快適に活用するために制作されたプラグインです。
+
+最新版:
+https://github.com/user/VimSelectInfo.vim
+
+
+==============================================================================
+使い方						*VimSelectInfo-usage*
+
+```
+開始
+    :RegInfoWindow				*:RegInfoWindowOff*
+終了
+    :RegInfoWindowOff				*:RegInfoWindowOff*
+```
+
+
+==============================================================================
+インターフェイス				*VimSelectInfo-interface*
+
+------------------------------------------------------------------------------
+変数						*VimSelectInfo-variables*
+
+g:VimSelectInfoDir				*g:VimSelectInfoDir*
+	既定値: =`"~/.cache/viminfo"`
+
+viminfoを保存・検索するディレクトリを指定します。チルダも問題なく認識します。
+設定例 : `let g:VimSelectInfoDir = '~/viminfo'`
+
+
+
+g:VimSelectInfoAutoStart			*g:VimSelectInfoAutoStart*
+
+1を指定するとvim起動時にウィンドウを開きます
+
+
+g:SelectInfoWindowSize				*g:SelectInfoWindowSize*
+	既定値: =25
+
+windowの横幅を指定します。
+
+
+------------------------------------------------------------------------------
+コマンド					*VimSelectInfo-commands*
+
+:SelectInfo [{}]				*:SelectInfo*
+引数0 or 1
+
+読み込むviminfoのファイル名を要求します。
+引数がなければ`default_viminfo.vim`を読み込みます。
+
+
+
+:SelectInfoEdit [{}]				*:SelectInfoEdit*
+引数0 or 1
+
+編集するviminfoのファイル名を要求します。
+引数がなければ`default_viminfo.vim`の編集を開始します。
+
+
+:SelectInfoSave [{}]				*:SelectInfoSave*
+引数0 or 1
+
+現在vimに保存されているviminfoを指定したファイル名に上書きします。
+同名ファイルが存在する場合はy/nが発生します。
+引数がなければ`default_viminfo.vim`の編集を開始します。
+
+
+:RegInfoWindow					*:RegInfoWindow*
+
+ウィンドウを表示します
+
+
+:RegInfoWindowOff				*:RegInfoWindowOff*
+
+ウィンドウを閉じます。
+
+
+:RegInfoWindowClean				*:RegInfoWindowClean*
+
+a-zまでのレジストリを""で上書きします。
+
+
+:RegExchange {}					*:RegExchange*
+引数1
+
+文字を1文字もしくは2文字要求します。
+`RegExchange a`:現在無名レジスタに保存されているテキストを`a`レジスタに移動します。
+`RegExchange ab`:現在`a`レジスタに保存されているテキストを`b`レジスタに移動します。
+
+
+------------------------------------------------------------------------------
+キーマッピング					*VimSelectInfo-key-mappings*
+
+------------------------------------------------------------------------------
+関数						*VimSelectInfo-functions*
+
+CompInfo({lead}, {line}, {pos} )		*CompInfo()*
+
+
+VimSelectInfo#checkBufList()			*VimSelectInfo#checkBufList()*
+
+
+VimSelectInfo#closeWindow()			*VimSelectInfo#closeWindow()*
+
+
+VimSelectInfo#nextYankPost()			*VimSelectInfo#nextYankPost()*
+
+
+VimSelectInfo#openWindow()			*VimSelectInfo#openWindow()*
+
+
+VimSelectInfo#regClean()			*VimSelectInfo#regClean()*
+
+
+VimSelectInfo#regExchange({reg-name})		*VimSelectInfo#regExchange()*
+
+
+VimSelectInfo#selectInfo( {name} )		*VimSelectInfo#selectInfo()*
+
+
+VimSelectInfo#selectInfoEdit( {name} )	*VimSelectInfo#selectInfoEdit()*
+
+
+VimSelectInfo#selectInfoSave( {name} )	*VimSelectInfo#selectInfoSave()*
+
+
+VimSelectInfo#setReplace({reg-name})		*VimSelectInfo#setReplace()*
+
+
+VimSelectInfo#setTemplate()			*VimSelectInfo#setTemplate()*
+
+
+==============================================================================
+TODO						*VimSelectInfo-todo*
+
+
+
+==============================================================================
+更新履歴					*VimSelectInfo-changelog*
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:

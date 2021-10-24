@@ -3,6 +3,7 @@ if !exists("g:VimSelectInfoDir")
 else
     let s:VimSelectInfo=expand(g:VimSelectInfoDir)
 endif
+
 if !exists("g:SelectInfoWindowSize")
     let g:SelectInfoWindowSize =25
 endif
