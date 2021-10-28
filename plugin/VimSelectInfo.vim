@@ -16,6 +16,12 @@ if exists('g:loaded_VimSelectInfo')
 endif
 let g:loaded_VimSelectInfo = 1
 
+if !exists("g:VimSelectInfoDir")
+    let g:VimSelectInfoDirectory=expand("~/.cache/viminfo")
+else
+    let g:VimSelectInfoDirectory=expand(g:VimSelectInfoDir)
+endif
+
 command! -nargs=? -complete=customlist,CompInfo SelectInfo call VimSelectInfo#selectInfo('<args>')
 command! -nargs=? -complete=customlist,CompInfo SelectInfoEdit call VimSelectInfo#selectInfoEdit('<args>')
 command! -nargs=? -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
@@ -27,7 +33,7 @@ command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
 
 function! CompInfo(lead, line, pos )
     let l:matches = []
-    let l:dir = s:VimSelectInfo
+    let l:dir = g:VimSelectInfoDirectory
     let l:sep = fnamemodify(',' , ':p')[-1:]
     let l:Filter = { file -> !isdirectory( l:dir . l:sep . file ) }
     let l:files = readdir( l:dir , l:Filter )

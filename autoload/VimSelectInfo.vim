@@ -1,8 +1,8 @@
-if !exists("g:VimSelectInfoDir")
-    let s:VimSelectInfo=expand("~/.cache/viminfo")
-else
-    let s:VimSelectInfo=expand(g:VimSelectInfoDir)
-endif
+"if !exists("g:VimSelectInfoDir")
+"    let g:VimSelectInfoDirectory=expand("~/.cache/viminfo")
+"else
+"    let g:VimSelectInfoDirectory=expand(g:VimSelectInfoDir)
+"endif
 
 if !exists("g:SelectInfoWindowSize")
     let g:SelectInfoWindowSize =25
@@ -11,9 +11,9 @@ let s:VimSelectInfoBuffer='RegInfoWindow://'
 
 
 function! VimSelectInfo#selectInfo( name )
-    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = g:VimSelectInfoDirectory . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = s:VimSelectInfo . '/' . a:name
+        let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
@@ -22,9 +22,9 @@ function! VimSelectInfo#selectInfo( name )
 endfunction
 
 function! VimSelectInfo#selectInfoEdit( name )
-    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = g:VimSelectInfoDirectory . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = s:VimSelectInfo . '/' . a:name
+        let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
     if filereadable(l:file)
         execute("e " . l:file )
@@ -32,9 +32,9 @@ function! VimSelectInfo#selectInfoEdit( name )
 endfunction
 
 function! VimSelectInfo#selectInfoSave( name )
-    let l:file = s:VimSelectInfo . '/default_viminfo.vim'
+    let l:file = g:VimSelectInfoDirectory . '/default_viminfo.vim'
     if a:name != ''
-        let l:file = s:VimSelectInfo . '/' . a:name
+        let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
     if filereadable(l:file)
         echo 'overwrite? y / other'
