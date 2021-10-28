@@ -22,16 +22,16 @@ else
     let g:VimSelectInfoDirectory=expand(g:VimSelectInfoDir)
 endif
 
-command! -nargs=? -complete=customlist,CompInfo SelectInfo call VimSelectInfo#selectInfo('<args>')
-command! -nargs=? -complete=customlist,CompInfo SelectInfoEdit call VimSelectInfo#selectInfoEdit('<args>')
-command! -nargs=? -complete=customlist,CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
+command! -nargs=? -complete=customlist,VimSelectInfo#CompInfo SelectInfo call VimSelectInfo#selectInfo('<args>')
+command! -nargs=? -complete=customlist,VimSelectInfo#CompInfo SelectInfoEdit call VimSelectInfo#selectInfoEdit('<args>')
+command! -nargs=? -complete=customlist,VimSelectInfo#CompInfo SelectInfoSave call VimSelectInfo#selectInfoSave('<args>')
 
 command! -nargs=0 RegInfoWindow call VimSelectInfo#openWindow()
 command! -nargs=0 RegInfoWindowOff call VimSelectInfo#closeWindow()
 command! -nargs=0 RegInfoWindowClean call VimSelectInfo#regClean()
 command! -nargs=1 RegExchange call VimSelectInfo#regExchange(<f-args>)
 
-function! CompInfo(lead, line, pos )
+function! VimSelectInfo#CompInfo(lead, line, pos )
     let l:matches = []
     let l:dir = g:VimSelectInfoDirectory
     let l:sep = fnamemodify(',' , ':p')[-1:]
