@@ -16,12 +16,15 @@ function! VimSelectInfo#selectInfo( name )
         let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
 
-    "save->backup now
-    "load! name 
-    "load now
+    "現在のviminfoをバックアップ
+    let l:backup_file = g:VimSelectInfoDirectory . '/defaultbackup_viminfo.vim'
+    execute("wviminfo! " . l:backup_file )
+    "目的のinfofileをLoad
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
     endif
+    "バックアップを上書きせずにロード
+    execute("rviminfo " . l:backup_file )
 
     call VimSelectInfo#openWindow()
 endfunction
