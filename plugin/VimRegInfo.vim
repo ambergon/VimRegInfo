@@ -22,7 +22,7 @@ else
     let g:VimRegInfoDirectory=expand(g:VimRegInfoDir)
 endif
 
-command! -nargs=? -complete=customlist,VimRegInfo#CompInfo RegInfoLoad call VimRegInfo#regInfoLoad('<args>')
+command! -nargs=? -complete=customlist,VimRegInfo#CompInfo RegInfo call VimRegInfo#regInfoLoad('<args>')
 command! -nargs=? -complete=customlist,VimRegInfo#CompInfo RegInfoEdit call VimRegInfo#regInfoEdit('<args>')
 command! -nargs=? -complete=customlist,VimRegInfo#CompInfo RegInfoSave call VimRegInfo#regInfoSave('<args>')
 
