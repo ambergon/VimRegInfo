@@ -1,4 +1,4 @@
-*VimSelectInfo.txt*	日本語ヘルプ
+*VimRegInfo.txt*	日本語ヘルプ
 
 Version :
 Author  : ambergon
@@ -23,31 +23,31 @@ License : MIT license  {{{
 }}}
 
 ==============================================================================
-目次						*VimSelectInfo-contents*
+目次						*VimRegInfo-contents*
 
-概要				|VimSelectInfo-introduction|
-使い方				|VimSelectInfo-usage|
-インターフェイス		|VimSelectInfo-interface|
-  変数				  |VimSelectInfo-variables|
-  コマンド			  |VimSelectInfo-commands|
-  キーマッピング		  |VimSelectInfo-key-mappings|
-  関数				  |VimSelectInfo-functions|
-TODO				|VimSelectInfo-todo|
-更新履歴			|VimSelectInfo-changelog|
+概要				|VimRegInfo-introduction|
+使い方				|VimRegInfo-usage|
+インターフェイス		|VimRegInfo-interface|
+  変数				  |VimRegInfo-variables|
+  コマンド			  |VimRegInfo-commands|
+  キーマッピング		  |VimRegInfo-key-mappings|
+  関数				  |VimRegInfo-functions|
+TODO				|VimRegInfo-todo|
+更新履歴			|VimRegInfo-changelog|
 
 
 ==============================================================================
-概要						*VimSelectInfo-introduction*
+概要						*VimRegInfo-introduction*
 
-*VimSelectInfo*
+*VimRegInfo*
 レジスタやviminfoを快適に活用するために制作されたプラグインです。
 
 最新版:
-https://github.com/user/VimSelectInfo.vim
+https://github.com/user/VimRegInfo.vim
 
 
 ==============================================================================
-使い方						*VimSelectInfo-usage*
+使い方						*VimRegInfo-usage*
 
 ```
 開始
@@ -58,34 +58,34 @@ https://github.com/user/VimSelectInfo.vim
 
 
 ==============================================================================
-インターフェイス				*VimSelectInfo-interface*
+インターフェイス				*VimRegInfo-interface*
 
 ------------------------------------------------------------------------------
-変数						*VimSelectInfo-variables*
+変数						*VimRegInfo-variables*
 
-g:VimSelectInfoDir				*g:VimSelectInfoDir*
+g:VimRegInfoDir				*g:VimRegInfoDir*
 	既定値: =`"~/.cache/viminfo"`
 
 viminfoを保存・検索するディレクトリを指定します。チルダも問題なく認識します。
-設定例 : `let g:VimSelectInfoDir = '~/viminfo'`
+設定例 : `let g:VimRegInfoDir = '~/viminfo'`
 
 
 
-g:VimSelectInfoAutoStart			*g:VimSelectInfoAutoStart*
+g:VimRegInfoAutoStart			*g:VimRegInfoAutoStart*
 
 1を指定するとvim起動時にウィンドウを開きます
 
 
-g:SelectInfoWindowSize				*g:SelectInfoWindowSize*
+g:RegInfoWindowSize				*g:RegInfoWindowSize*
 	既定値: =25
 
 windowの横幅を指定します。
 
 
 ------------------------------------------------------------------------------
-コマンド					*VimSelectInfo-commands*
+コマンド					*VimRegInfo-commands*
 
-:SelectInfo [{}]				*:SelectInfo*
+:RegInfo [{}]				*:RegInfo*
 引数0 or 1
 
 読み込むviminfoのファイル名を要求します。
@@ -93,14 +93,14 @@ windowの横幅を指定します。
 
 
 
-:SelectInfoEdit [{}]				*:SelectInfoEdit*
+:RegInfoEdit [{}]				*:RegInfoEdit*
 引数0 or 1
 
 編集するviminfoのファイル名を要求します。
 引数がなければ`default_viminfo.vim`の編集を開始します。
 
 
-:SelectInfoSave [{}]				*:SelectInfoSave*
+:RegInfoSave [{}]				*:RegInfoSave*
 引数0 or 1
 
 現在vimに保存されているviminfoを指定したファイル名に上書きします。
@@ -132,54 +132,57 @@ a-zまでのレジストリを""で上書きします。
 
 
 ------------------------------------------------------------------------------
-キーマッピング					*VimSelectInfo-key-mappings*
+キーマッピング					*VimRegInfo-key-mappings*
 
 ------------------------------------------------------------------------------
-関数						*VimSelectInfo-functions*
+関数						*VimRegInfo-functions*
 
 CompInfo({lead}, {line}, {pos} )		*CompInfo()*
 
 
-VimSelectInfo#checkBufList()			*VimSelectInfo#checkBufList()*
+VimRegInfo#checkBufList()			*VimRegInfo#checkBufList()*
 
 
-VimSelectInfo#closeWindow()			*VimSelectInfo#closeWindow()*
+VimRegInfo#closeWindow()			*VimRegInfo#closeWindow()*
 
 
-VimSelectInfo#nextYankPost()			*VimSelectInfo#nextYankPost()*
+VimRegInfo#nextYankPost()			*VimRegInfo#nextYankPost()*
 
 
-VimSelectInfo#openWindow()			*VimSelectInfo#openWindow()*
+VimRegInfo#openWindow()			*VimRegInfo#openWindow()*
 
 
-VimSelectInfo#regClean()			*VimSelectInfo#regClean()*
+VimRegInfo#regClean()			*VimRegInfo#regClean()*
 
 
-VimSelectInfo#regExchange({reg-name})		*VimSelectInfo#regExchange()*
+VimRegInfo#regExchange({reg-name})		*VimRegInfo#regExchange()*
 
 
-VimSelectInfo#selectInfo( {name} )		*VimSelectInfo#selectInfo()*
+VimRegInfo#regInfoLoad( {name} )		*VimRegInfo#regInfoLoad()*
 
 
-VimSelectInfo#selectInfoEdit( {name} )	*VimSelectInfo#selectInfoEdit()*
+VimRegInfo#regInfoEdit( {name} )	*VimRegInfo#regInfoEdit()*
 
 
-VimSelectInfo#selectInfoSave( {name} )	*VimSelectInfo#selectInfoSave()*
+VimRegInfo#regInfoSave( {name} )	*VimRegInfo#regInfoSave()*
 
 
-VimSelectInfo#setReplace({reg-name})		*VimSelectInfo#setReplace()*
+VimRegInfo#setReplace({reg-name})		*VimRegInfo#setReplace()*
 
 
-VimSelectInfo#setTemplate()			*VimSelectInfo#setTemplate()*
-
-
-==============================================================================
-TODO						*VimSelectInfo-todo*
-
+VimRegInfo#setTemplate()			*VimRegInfo#setTemplate()*
 
 
 ==============================================================================
-更新履歴					*VimSelectInfo-changelog*
+TODO						*VimRegInfo-todo*
+
+
+
+==============================================================================
+更新履歴					*VimRegInfo-changelog*
+21/12/17
+	プラグイン名変更。
+	各動作の最適化
 
 
 ==============================================================================
