@@ -15,9 +15,14 @@ function! VimSelectInfo#selectInfo( name )
     if a:name != ''
         let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
+
+    "save->backup now
+    "load! name 
+    "load now
     if filereadable(l:file)
         execute("rviminfo! " . l:file )
     endif
+
     call VimSelectInfo#openWindow()
 endfunction
 
@@ -36,6 +41,10 @@ function! VimSelectInfo#selectInfoSave( name )
     if a:name != ''
         let l:file = g:VimSelectInfoDirectory . '/' . a:name
     endif
+    "vimrcで指定しているviminfoのバックアップ
+    let l:backup_viminfo_setting=&viminfo
+    "余計な出力を減らす努力
+    set viminfo='0,/0,:0,@0,f0
     if filereadable(l:file)
         echo 'overwrite? y / other'
         let l:c = getcharstr()
@@ -48,6 +57,8 @@ function! VimSelectInfo#selectInfoSave( name )
     else
         execute("wviminfo! " . l:file )
     endif
+    "復元
+    eval("set viminfo=" . l:backup_viminfo_setting)
 endfunction
 
 function! VimSelectInfo#regExchange(reg_name)
@@ -58,8 +69,9 @@ function! VimSelectInfo#regExchange(reg_name)
         call setreg( a:reg_name, getreg(""))
         echo '* -> ' . a:reg_name
     else
-        "２文字目を一文字目のレジスタに。
+        "1文字目を2文字目のレジスタに。
         call setreg( a:reg_name[1], getreg(a:reg_name[0]))
+        call setreg( a:reg_name[0], [])
         echo a:reg_name[0] . ' -> ' . a:reg_name[1]
     endif
     call VimSelectInfo#openWindow()
